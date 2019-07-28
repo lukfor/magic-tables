@@ -51,7 +51,8 @@ table.getColumns().get(name).getMin()
 table.getColumns().get(name).getMax()
 table.getColumns().get(name).getMedian()
 table.getColumns().get(name).getMissingValues()
-table.getColumns().get(name).getUniqueValues() table.getRows().getAll("colum_name", "value")
+table.getColumns().get(name).getUniqueValues()
+table.getRows().getAll("colum_name", "value")
 table.getRows().getAllByRegEx("colum_name", "value|value2")
 table.getRows().getSize()
 ```
@@ -79,7 +80,7 @@ table.getRows().dropMissings("colum_name");
 table.getRows().dropDuplicates()
 table.getColumns().fillMissings("value");
 table.getColumns().get("colum_name").fillMissings("value");
-``
+```
 
 
 
