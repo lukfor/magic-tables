@@ -1,13 +1,19 @@
 package lukfor.tables;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import lukfor.tables.columns.AbstractColumn;
+import lukfor.tables.columns.types.IntegerColumn;
 import lukfor.tables.columns.types.StringColumn;
+import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.IRowProcessor;
+import lukfor.tables.rows.IRowReducer;
 import lukfor.tables.rows.Row;
+import lukfor.tables.rows.RowGroupProcessor;
 
 public class Table {
 
@@ -51,18 +57,48 @@ public class Table {
 		return rows;
 	}
 
-	public void merge(final Table table2, final String col) throws IOException {
-		merge(table2, col, col);
+	public Table groupBy(final String column, IRowReducer aggregation) throws IOException {
+		return groupBy(new IRowMapper() {
+			@Override
+			public Object getKey(Row row) throws IOException {
+				return row.getObject(column);
+			}
+		}, aggregation);
 	}
 
-	public void merge(final Table table2, final String colTable1, final String colTable2) throws IOException {
+	public Table groupBy(IRowMapper mapper, IRowReducer reducer) throws IOException {
+		RowGroupProcessor processor = new RowGroupProcessor(mapper);
+		forEachRow(processor);
+		Map<Object, List<Integer>> groups = processor.getGroups();
+		Table table = new Table(name + ".groupBy");
+		List<AbstractColumn> columns = reducer.getColumns();
+		for (AbstractColumn column : columns) {
+			table.getColumns().append(column);
+		}
+		for (Object key : groups.keySet()) {
+			List<Integer> indices = groups.get(key);
+			List<Row> rows = new Vector<Row>();
+			for (Integer index : indices) {
+				rows.add(getRows().get(index));
+			}
+			Row newRow = reducer.reduce(key, rows);
+			table.getRows().append(newRow);
+		}
+		return table;
+	}
+
+	public void merge(final Table table2, final String column) throws IOException {
+		merge(table2, column, column);
+	}
+
+	public void merge(final Table table2, final String columnTable1, final String columnTable2) throws IOException {
 
 		final List<String> columnsTable2 = new Vector<String>();
 
 		// add all columns from table expect join column
 		for (int i = 0; i < table2.getColumns().getSize(); i++) {
 			AbstractColumn columTable2 = table2.getColumns().get(i);
-			if (!columTable2.getName().equals(colTable2)) {
+			if (!columTable2.getName().equals(columnTable2)) {
 				columns.append(new StringColumn(columTable2.getName()));
 				columns.setType(columTable2.getName(), columTable2.getType());
 				columnsTable2.add(columTable2.getName());
@@ -73,8 +109,8 @@ public class Table {
 
 			public void process(Row row) throws IOException {
 
-				Object value = row.getObject(colTable1);
-				List<Row> rowsTable2 = table2.getRows().getAll(colTable2, value);
+				Object value = row.getObject(columnTable1);
+				List<Row> rowsTable2 = table2.getRows().getAll(columnTable2, value);
 				if (rowsTable2.size() != 1) {
 					throw new IOException("simple merge not possible. No one to one mapping found.");
 				}

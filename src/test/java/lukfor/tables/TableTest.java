@@ -6,10 +6,13 @@ import java.util.List;
 import junit.framework.TestCase;
 import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
+import lukfor.tables.columns.ColumnType;
 import lukfor.tables.columns.IValueBuilder;
 import lukfor.tables.columns.types.DoubleColumn;
 import lukfor.tables.columns.types.IntegerColumn;
 import lukfor.tables.io.TableBuilder;
+import lukfor.tables.io.TableWriter;
+import lukfor.tables.rows.Aggregations;
 import lukfor.tables.rows.Row;
 import lukfor.tables.rows.filters.IRowFilter;
 
@@ -199,4 +202,21 @@ public class TableTest extends TestCase {
 		assertEquals(0, column.getMissings());
 	}
 
+	
+	public void testGroupByKeyAndCount() throws IOException {
+		Table table = TableBuilder.fromCsvFile("data/groups.csv", ',');
+
+		Table groups = table.groupBy("group", Aggregations.COUNT);
+		groups.getColumns().setType("key", ColumnType.INTEGER);
+		groups.getRows().sortAscBy("key");
+		TableWriter.writeToCsv(groups, "test.csv",',');
+
+		assertEquals(2, groups.getColumns().getSize());
+		assertEquals(3, groups.getRows().getSize());
+		assertEquals(3, groups.get(0, "count"));
+		assertEquals(2, groups.get(1, "count"));
+		assertEquals(4, groups.get(2, "count"));
+		
+	}
+	
 }
