@@ -31,30 +31,29 @@ Object o = table.get(rowIndex, columnIndex)
 
 `getRow` provided typesafe methods:
 ```java
-- table.getRow(rowIndex).getObject("colum_name");
-- table.getRow(rowIndex).getInteger("colum_name");
-- table.getRow(rowIndex).getDouble("colum_name");
-- table.getRow(rowIndex).getString("colum_name");
+table.getRow(rowIndex).getObject("colum_name");
+table.getRow(rowIndex).getInteger("colum_name");
+table.getRow(rowIndex).getDouble("colum_name");
+table.getRow(rowIndex).getString("colum_name");
 ```
 
 ```java
-- table.print()
-- table.printFirst(n)
-- table.printLast(n)
-- table.getColumns().getNames()
-- table.getColumns().getTypes()
-- table.getColumns().getSize()
-- table.getColumns().get(name).print()
-- table.getColumns().get(name).getSummary()
-- table.getColumns().get(name).getMean()
-- table.getColumns().get(name).getMin()
-- table.getColumns().get(name).getMax()
-- table.getColumns().get(name).getMedian()
-- table.getColumns().get(name).getMissingValues()
-- table.getColumns().get(name).getUniqueValues()
-- table.getRows().getAll("colum_name", "value")
-- table.getRows().getAllByRegEx("colum_name", "value|value2")
-- table.getRows().getSize()
+table.print()
+table.printFirst(n)
+table.printLast(n)
+table.getColumns().getNames()
+table.getColumns().getTypes()
+table.getColumns().getSize()
+table.getColumns().get(name).print()
+table.getColumns().get(name).getSummary()
+table.getColumns().get(name).getMean()
+table.getColumns().get(name).getMin()
+table.getColumns().get(name).getMax()
+table.getColumns().get(name).getMedian()
+table.getColumns().get(name).getMissingValues()
+table.getColumns().get(name).getUniqueValues() table.getRows().getAll("colum_name", "value")
+table.getRows().getAllByRegEx("colum_name", "value|value2")
+table.getRows().getSize()
 ```
 
 ## Cleaning data
@@ -65,6 +64,7 @@ table.getRows().selectByRegEx("colum_name", "a|b")
 table.getRows().select(filter)
 table.getRows().select(bitmask)
 ```
+
 ```java
 table.getRows().dropByRegEx("colum_name", "a|b")
 table.getRows().drop(filter)
@@ -94,15 +94,16 @@ table.getColumns().dropByRegEx("col*");
 table.getColumns().drop(filter);
 table.getColumns().append("colum_name", builder())
 table.getRows().append(row)
-``
+```
 
 ## Joining and reshaping
 
-- table.melt(..) (new table?)
-- table.merge(table2, LEFT | RIGHT | OUTER | INNER) (new table?) ok
-- table.pivot(..) ????
-- table.concat(table2) (new table?) ok
-
+```java
+table.melt(..) (new table?)
+table.merge(table2, LEFT | RIGHT | OUTER | INNER) (new table?) ok
+table.pivot(..) ????
+table.concat(table2) (new table?) ok
+```
 
 ## Sorting data
 
