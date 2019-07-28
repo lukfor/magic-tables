@@ -1,4 +1,4 @@
-package genepi.tables;
+package lukfor.tables;
 
 import java.io.IOException;
 import java.util.List;

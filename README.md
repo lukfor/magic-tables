@@ -149,11 +149,11 @@ sdk install groovy
 ```groovy
 @Grab('lukfor:tables:0.0.1')
 
-import genepi.tables.*
-import genepi.tables.io.*
-import genepi.tables.rows.*
-import genepi.tables.columns.*
-import genepi.tables.columns.types.*
+import lukfor.tables.*
+import lukfor.tables.io.*
+import lukfor.tables.rows.*
+import lukfor.tables.columns.*
+import lukfor.tables.columns.types.*
 
 Table table = TableBuilder.fromCsvFile("data/dummy.csv", ',' as char);
 
