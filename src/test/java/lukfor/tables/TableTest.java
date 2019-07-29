@@ -158,6 +158,18 @@ public class TableTest extends TestCase {
 		assertEquals(7, table.getRows().getSize());
 
 	}
+	
+	public void testfillMissingsByColumn() throws IOException {
+
+		// 2 missings in cloumn a
+		Table table = TableBuilder.fromCsvFile("data/missings.csv").load();
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(7, table.getRows().getSize());
+		assertEquals(2, table.getColumns().get("a").getMissings());
+		table.getColumns().get("a").fillMissings(-1);
+		assertEquals(0, table.getColumns().get("a").getMissings());
+
+	}
 
 	public void testAppendColumn() throws IOException {
 

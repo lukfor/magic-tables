@@ -103,6 +103,14 @@ public abstract class AbstractColumn {
 		return name + " [" + getType() + "]";
 	}
 
+	public void fillMissings(Object value) {
+		for (int i = 0; i < storage.size(); i++) {
+			if (storage.get(i) == null) {
+				storage.set(i, value);
+			}
+		}
+	}
+
 	public int getMissings() {
 		int missings = 0;
 		for (int i = 0; i < storage.size(); i++) {

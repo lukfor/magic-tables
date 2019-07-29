@@ -85,6 +85,12 @@ public class Table {
 		return table;
 	}
 
+	public void fillMissings(Object value) {
+		for (AbstractColumn column : storage) {
+			column.fillMissings(value);
+		}
+	}
+	
 	public void merge(final Table table2, final String column) throws IOException {
 		merge(table2, column, column);
 	}
