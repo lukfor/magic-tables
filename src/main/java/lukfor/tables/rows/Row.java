@@ -48,4 +48,8 @@ public class Row {
 		return false;
 	}
 	
+	public int getHashCode() {
+		return values.hashCode();
+	}
+	
 }

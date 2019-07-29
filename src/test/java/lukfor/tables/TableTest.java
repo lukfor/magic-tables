@@ -170,6 +170,17 @@ public class TableTest extends TestCase {
 		assertEquals(0, table.getColumns().get("a").getMissings());
 
 	}
+	
+	public void testDropDuplicates() throws IOException {
+
+		// 2 missings in cloumn a
+		Table table = TableBuilder.fromCsvFile("data/duplicates.csv").load();
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(10, table.getRows().getSize());
+		table.getRows().dropDuplicates();
+		assertEquals(7, table.getRows().getSize());
+
+	}
 
 	public void testAppendColumn() throws IOException {
 

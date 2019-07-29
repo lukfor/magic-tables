@@ -8,6 +8,7 @@ import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.ColumnSorter;
 import lukfor.tables.rows.IRowProcessor;
 import lukfor.tables.rows.Row;
+import lukfor.tables.rows.RowDuplicateProcessor;
 import lukfor.tables.rows.RowSelectionProcessor;
 import lukfor.tables.rows.filters.IRowFilter;
 import lukfor.tables.rows.filters.RowValueRegExFilter;
@@ -133,6 +134,12 @@ public class RowOperations {
 
 	}
 
+	public void dropDuplicates() throws IOException {
+		RowDuplicateProcessor processor = new RowDuplicateProcessor();
+		table.forEachRow(processor);
+		drop(processor.getBitmask());
+	}
+	
 	public void dropMissings() throws IOException {
 		IRowFilter filter = new IRowFilter() {			
 			@Override
