@@ -38,6 +38,12 @@ public class ColumnOperations {
 		return columns.get(index);
 	}
 
+	public void rename(String oldName, String newName) throws IOException {
+		table.assertsColumnExists(oldName);
+		AbstractColumn column = get(oldName);
+		column.setName(newName);
+	}
+
 	public void append(AbstractColumn column) throws IOException {
 		append(column, null);
 	}
@@ -74,7 +80,7 @@ public class ColumnOperations {
 		AbstractColumn oldColumn = get(column);
 		setType(oldColumn, type);
 	}
-	
+
 	public void setType(AbstractColumn column, ColumnType type) throws IOException {
 
 		AbstractColumn newColumn = ColumnFactory.createColumn(column.getName(), type);
@@ -143,5 +149,5 @@ public class ColumnOperations {
 	public int getSize() {
 		return columns.size();
 	}
-	
+
 }

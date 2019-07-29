@@ -73,12 +73,18 @@ table.getRows().getSize()
 table.getRows().selectByRegEx("column_name", "a|b")
 table.getRows().select(filter)
 table.getRows().select(bitmask)
-```
-
-```java
 table.getRows().dropByRegEx("column_name", "a|b")
 table.getRows().drop(filter)
 table.getRows().drop(bitmask)
+```
+
+```java
+table.getColumns().select("name1","name2","name3", ...)
+table.getColumns().selectByRegEx("col*");
+table.getColumns().select(filter);
+table.getColumns().drop("name1","name2","name3", ...)
+table.getColumns().dropByRegEx("col*");
+table.getColumns().drop(filter);
 ```
 
 Special functions:
@@ -93,19 +99,19 @@ table.replaceValue("old","new");
 table.getColumn("column_name").replaceValue("old","new");
 ```
 
-
-
 ## Transforming data
 
 ```java
-table.getColumns().select("name1","name2","name3", ...)
-table.getColumns().selectByRegEx("col*");
-table.getColumns().select(filter);
-table.getColumns().drop("name1","name2","name3", ...)
-table.getColumns().dropByRegEx("col*");
-table.getColumns().drop(filter);
 table.getColumns().append("column_name", builder())
+table.getColumns().rename("column_name", "new_name")
 table.getRows().append(row)
+```
+
+## Sorting data
+
+```java
+table.getRows().sortAscBy("column_name");
+table.getRows().sortDescBy("column_name");
 ```
 
 ## Joining and reshaping
@@ -116,13 +122,6 @@ table.merge(table2, LEFT);
 table.merge | RIGHT | OUTER | INNER) *todo*
 table.pivot(..) *todo*
 table.concat(table2) (or append?) *todo*
-```
-
-## Sorting data
-
-```java
-table.getRows().sortAscBy("column_name");
-table.getRows().sortDescBy("column_name");
 ```
 
 ## Aggregating data
