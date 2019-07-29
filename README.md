@@ -48,6 +48,8 @@ table.getRow(rowIndex).getString("colum_name");
 table.print()
 table.printFirst(n)
 table.printLast(n)
+table.getColumns().getMissings()
+table.getColumns().getUniqueValues()
 table.getColumns().getNames()
 table.getColumns().getTypes()
 table.getColumns().getSize()
@@ -57,7 +59,7 @@ table.getColumns().get(name).getMean()
 table.getColumns().get(name).getMin()
 table.getColumns().get(name).getMax()
 table.getColumns().get(name).getMedian()
-table.getColumns().get(name).getMissingValues()
+table.getColumns().get(name).getMissings()
 table.getColumns().get(name).getUniqueValues()
 table.getRows().getAll("colum_name", "value")
 table.getRows().getAllByRegEx("colum_name", "value|value2")
@@ -87,6 +89,7 @@ table.getRows().dropMissings("colum_name");
 table.getRows().dropDuplicates()
 table.getColumns().fillMissings("value");
 table.getColumns().get("colum_name").fillMissings("value");
+table.getRows().replaceValue("old","new");
 ```
 
 
@@ -107,10 +110,11 @@ table.getRows().append(row)
 ## Joining and reshaping
 
 ```java
-table.melt(..) (new table?)
-table.merge(table2, LEFT | RIGHT | OUTER | INNER) (new table?) ok
-table.pivot(..) ????
-table.concat(table2) (new table?) ok
+table.melt(..) *todo*
+table.merge(table2, LEFT);
+table.merge | RIGHT | OUTER | INNER) *todo*
+table.pivot(..) *todo*
+table.concat(table2) (or append?) *todo*
 ```
 
 ## Sorting data
@@ -123,12 +127,12 @@ table.getRows().sortDescBy("colum_name");
 ## Aggregating data
 
 ```java
-table.groupBy("colum_name", Aggregation.SUM);
+table.groupBy("colum_name", Aggregation.SUM); *todo*
 table.groupBy("colum_name", Aggregation.COUNT)
-table.groupBy("colum_name", Aggregation.MAX)
-table.groupBy("colum_name", Aggregation.MIN)
-table.groupBy("colum_name", Aggregation.MEAN)
-table.groupBy("colum_name", Aggregation.MEDIAN)
+table.groupBy("colum_name", Aggregation.MAX)  *todo*
+table.groupBy("colum_name", Aggregation.MIN)  *todo*
+table.groupBy("colum_name", Aggregation.MEAN)  *todo*
+table.groupBy("colum_name", Aggregation.MEDIAN)  *todo*
 table.groupBy(function(), function())
 ```
 

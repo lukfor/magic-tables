@@ -171,7 +171,7 @@ public class TableTest extends TestCase {
 
 	}
 
-	public void testfillMissingsByColumn() throws IOException {
+	public void testFillMissings() throws IOException {
 
 		// 2 missings in cloumn a
 		Table table = TableBuilder.fromCsvFile("data/missings.csv").load();
@@ -180,6 +180,34 @@ public class TableTest extends TestCase {
 		assertEquals(2, table.getColumns().get("a").getMissings());
 		table.getColumns().get("a").fillMissings(-1);
 		assertEquals(0, table.getColumns().get("a").getMissings());
+
+	}
+
+	public void testReplaceValue() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/missings.csv").load();
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(7, table.getRows().getSize());
+		assertEquals(2, table.getColumns().get("a").getMissings());
+		table.getColumns().get("a").fillMissings(-1);
+		assertEquals(0, table.getColumns().get("a").getMissings());
+		table.getColumns().get("a").replaceValue(-1, null);
+		assertEquals(2, table.getColumns().get("a").getMissings());
+		table.getColumns().get("a").replaceValue(null, 9);
+		assertEquals(0, table.getColumns().get("a").getMissings());
+		table.getColumns().get("a").replaceValue(new Integer[] { 0, 1 }, new Integer[] { 11, 12 });
+		assertEquals(0, table.getColumns().get("a").getMissings());
+
+	}
+
+	public void testGetUniqueValues() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/uniques.csv").load();
+		assertEquals(2, table.getColumns().getSize());
+		assertEquals(9, table.getRows().getSize());
+		assertEquals(9, table.getColumns().get("a").getUniqueValues());
+		assertEquals(4, table.getColumns().get("b").getUniqueValues());
+		assertEquals(4 + 9, table.getUniqueValues());
 
 	}
 
@@ -289,7 +317,6 @@ public class TableTest extends TestCase {
 		Table groups = table.groupBy("group", Aggregations.COUNT);
 		groups.getColumns().setType("key", ColumnType.INTEGER);
 		groups.getRows().sortAscBy("key");
-		TableWriter.writeToCsv(groups, "test.csv", ',');
 
 		assertEquals(2, groups.getColumns().getSize());
 		assertEquals(3, groups.getRows().getSize());

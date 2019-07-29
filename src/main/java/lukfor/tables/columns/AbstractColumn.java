@@ -1,10 +1,13 @@
 package lukfor.tables.columns;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 public abstract class AbstractColumn {
@@ -111,6 +114,30 @@ public abstract class AbstractColumn {
 		}
 	}
 
+	public void replaceValue(Object oldValue, Object newValue) throws IOException {
+		replaceValue(new Object[] { oldValue }, new Object[] { newValue });
+	}
+
+	public void replaceValue(Object[] oldValues, Object[] newValues) throws IOException {
+
+		if (oldValues.length != newValues.length) {
+			throw new IOException("Arrays 'oldValues' and 'newValues' have different length.");
+		}
+
+		for (int i = 0; i < storage.size(); i++) {
+			Object value = storage.get(i);
+			for (int j = 0; j < oldValues.length; j++) {
+				Object oldValue = oldValues[j];
+				Object newValue = newValues[j];
+				if (value == null && oldValue == null) {
+					storage.set(i, newValue);
+				} else if (value != null && value.equals(oldValue)) {
+					storage.set(i, newValue);
+				}
+			}
+		}
+	}
+
 	public int getMissings() {
 		int missings = 0;
 		for (int i = 0; i < storage.size(); i++) {
@@ -119,6 +146,19 @@ public abstract class AbstractColumn {
 			}
 		}
 		return missings;
+	}
+
+	public int getUniqueValues() {
+		Set<Integer> uniques = new HashSet<Integer>();
+		for (int i = 0; i < storage.size(); i++) {
+			Object value = storage.get(i);
+			if (value != null) {
+				int hash = value.hashCode();
+				uniques.add(hash);
+			}
+		}
+		return uniques.size();
+
 	}
 
 	public Double getSum() {
@@ -149,10 +189,6 @@ public abstract class AbstractColumn {
 			}
 		}
 		return count;
-	}
-
-	public Integer getUniqueValues() {
-		return null;
 	}
 
 	public String getSummary() {

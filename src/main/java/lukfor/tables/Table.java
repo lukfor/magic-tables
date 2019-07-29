@@ -22,7 +22,7 @@ public class Table {
 	private RowOperations rows;
 
 	private ColumnOperations columns;
-	
+
 	public Table(String name) {
 		this.name = name;
 		rows = new RowOperations(this);
@@ -85,12 +85,38 @@ public class Table {
 		return table;
 	}
 
+	public int getMissings() {
+		int missings = 0;
+		for (AbstractColumn column : storage) {
+			missings += column.getMissings();
+		}
+		return missings;
+	}
+
 	public void fillMissings(Object value) {
 		for (AbstractColumn column : storage) {
 			column.fillMissings(value);
 		}
 	}
-	
+
+	public int getUniqueValues() {
+		int uniques = 0;
+		for (AbstractColumn column : storage) {
+			uniques += column.getUniqueValues();
+		}
+		return uniques;
+	}
+
+	public void replaceValue(Object oldValue, Object newValue) throws IOException {
+		replaceValue(new Object[] { oldValue }, new Object[] { newValue });
+	}
+
+	public void replaceValue(Object[] oldValues, Object[] newValues) throws IOException {
+		for (AbstractColumn column : storage) {
+			column.replaceValue(oldValues, newValues);
+		}
+	}
+
 	public void merge(final Table table2, final String column) throws IOException {
 		merge(table2, column, column);
 	}
