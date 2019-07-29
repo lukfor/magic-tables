@@ -89,7 +89,7 @@ table.getRows().dropMissings("colum_name");
 table.getRows().dropDuplicates()
 table.getColumns().fillMissings("value");
 table.getColumns().get("colum_name").fillMissings("value");
-table.getRows().replaceValue("old","new");
+table.getColumns().replaceValue("old","new");
 ```
 
 
