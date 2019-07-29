@@ -1,5 +1,6 @@
 package lukfor.tables.io;
 
+import java.io.File;
 import java.io.IOException;
 
 import genepi.io.table.writer.CsvTableWriter;
@@ -12,14 +13,22 @@ import lukfor.tables.rows.Row;
 
 public class TableWriter {
 
+	public static void writeToCsv(Table table, File file) throws IOException {
+		writeToCsv(table, file.getAbsolutePath(), ',');
+	}
+
 	public static void writeToCsv(Table table, String filename) throws IOException {
 		writeToCsv(table, filename, ',');
+	}
+
+	public static void writeToCsv(Table table, File file, char outputSeparator) throws IOException {
+		writeToCsv(table, file.getAbsolutePath(), outputSeparator);
 	}
 
 	public static void writeToCsv(Table table, String filename, char outputSeparator) throws IOException {
 
 		System.out.println("Writing file " + filename + "...");
-		CsvTableWriter writer = new CsvTableWriter(filename, outputSeparator);
+		CsvTableWriter writer = new CsvTableWriter(filename, outputSeparator, false);
 		writeToTableWriter(table, writer);
 
 	}

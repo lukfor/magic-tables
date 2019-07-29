@@ -1,8 +1,10 @@
 package lukfor.tables;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import genepi.io.FileUtil;
 import junit.framework.TestCase;
 import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
@@ -38,6 +40,16 @@ public class TableTest extends TestCase {
 		assertEquals(1, table.get(1, "id"));
 		assertEquals(2, table.get(2, "id"));
 
+	}
+
+	public void testWriteCsv() throws IOException {
+
+		// 2 missings in cloumn a
+		Table table = TableBuilder.fromCsvFile("data/duplicates.csv").load();
+		File output = File.createTempFile("test", ".csv");
+		TableWriter.writeToCsv(table, output);
+		assertEquals(FileUtil.readFileAsString("data/duplicates.csv"),
+				FileUtil.readFileAsString(output.getAbsolutePath()));
 	}
 
 	public void testSortIntegerColumn() throws IOException {
@@ -158,7 +170,7 @@ public class TableTest extends TestCase {
 		assertEquals(7, table.getRows().getSize());
 
 	}
-	
+
 	public void testfillMissingsByColumn() throws IOException {
 
 		// 2 missings in cloumn a
@@ -170,7 +182,7 @@ public class TableTest extends TestCase {
 		assertEquals(0, table.getColumns().get("a").getMissings());
 
 	}
-	
+
 	public void testDropDuplicates() throws IOException {
 
 		// 2 missings in cloumn a
