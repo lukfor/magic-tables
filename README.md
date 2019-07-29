@@ -87,7 +87,7 @@ Special functions:
 table.getRows().dropMissings();
 table.getRows().dropMissings("colum_name");
 table.getRows().dropDuplicates()
-table.getColumns().fillMissings("value");
+table.fillMissings("value");
 table.getColumns().get("colum_name").fillMissings("value");
 table.getColumns().replaceValue("old","new");
 ```
