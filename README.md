@@ -32,16 +32,16 @@ Table table = TableBuilder.fromXlsFile("data/dummy.xls").withColumnTypeDetection
 ## Inspecting data
 
 ```java
-Object o = table.get(rowIndex, "colum_name")
+Object o = table.get(rowIndex, "column_name")
 Object o = table.get(rowIndex, columnIndex)
 ```
 
 `getRow` provides typesafe methods:
 ```java
-table.getRow(rowIndex).getObject("colum_name");
-table.getRow(rowIndex).getInteger("colum_name");
-table.getRow(rowIndex).getDouble("colum_name");
-table.getRow(rowIndex).getString("colum_name");
+table.getRow(rowIndex).getObject("column_name");
+table.getRow(rowIndex).getInteger("column_name");
+table.getRow(rowIndex).getDouble("column_name");
+table.getRow(rowIndex).getString("column_name");
 ```
 
 ```java
@@ -53,16 +53,16 @@ table.getColumns().getUniqueValues()
 table.getColumns().getNames()
 table.getColumns().getTypes()
 table.getColumns().getSize()
-table.getColumns().get(name).print()
-table.getColumns().get(name).getSummary()
-table.getColumns().get(name).getMean()
-table.getColumns().get(name).getMin()
-table.getColumns().get(name).getMax()
-table.getColumns().get(name).getMedian()
-table.getColumns().get(name).getMissings()
-table.getColumns().get(name).getUniqueValues()
-table.getRows().getAll("colum_name", "value")
-table.getRows().getAllByRegEx("colum_name", "value|value2")
+table.getColumn("column_name").print()
+table.getColumn("column_name").getSummary()
+table.getColumn("column_name").getMean()
+table.getColumn("column_name").getMin()
+table.getColumn("column_name").getMax()
+table.getColumn("column_name").getMedian()
+table.getColumn("column_name").getMissings()
+table.getColumn("column_name").getUniqueValues()
+table.getRows().getAll("column_name", "value")
+table.getRows().getAllByRegEx("column_name", "value|value2")
 table.getRows().getSize()
 ```
 
@@ -70,13 +70,13 @@ table.getRows().getSize()
 
 
 ```java
-table.getRows().selectByRegEx("colum_name", "a|b")
+table.getRows().selectByRegEx("column_name", "a|b")
 table.getRows().select(filter)
 table.getRows().select(bitmask)
 ```
 
 ```java
-table.getRows().dropByRegEx("colum_name", "a|b")
+table.getRows().dropByRegEx("column_name", "a|b")
 table.getRows().drop(filter)
 table.getRows().drop(bitmask)
 ```
@@ -85,11 +85,12 @@ Special functions:
 
 ```java
 table.getRows().dropMissings();
-table.getRows().dropMissings("colum_name");
+table.getRows().dropMissings("column_name");
 table.getRows().dropDuplicates()
 table.fillMissings("value");
-table.getColumns().get("colum_name").fillMissings("value");
-table.getColumns().replaceValue("old","new");
+table.getColumn("column_name").fillMissings("value");
+table.replaceValue("old","new");
+table.getColumn("column_name").replaceValue("old","new");
 ```
 
 
@@ -97,13 +98,13 @@ table.getColumns().replaceValue("old","new");
 ## Transforming data
 
 ```java
-table.getColumns().select("colum_name1","colum_name2","colum_name3", ...)
+table.getColumns().select("name1","name2","name3", ...)
 table.getColumns().selectByRegEx("col*");
 table.getColumns().select(filter);
-table.getColumns().drop("colum_name1","colum_name2","colum_name3", ...)
+table.getColumns().drop("name1","name2","name3", ...)
 table.getColumns().dropByRegEx("col*");
 table.getColumns().drop(filter);
-table.getColumns().append("colum_name", builder())
+table.getColumns().append("column_name", builder())
 table.getRows().append(row)
 ```
 
@@ -120,19 +121,19 @@ table.concat(table2) (or append?) *todo*
 ## Sorting data
 
 ```java
-table.getRows().sortAscBy("colum_name");
-table.getRows().sortDescBy("colum_name");
+table.getRows().sortAscBy("column_name");
+table.getRows().sortDescBy("column_name");
 ```
 
 ## Aggregating data
 
 ```java
-table.groupBy("colum_name", Aggregation.SUM); *todo*
-table.groupBy("colum_name", Aggregation.COUNT)
-table.groupBy("colum_name", Aggregation.MAX)  *todo*
-table.groupBy("colum_name", Aggregation.MIN)  *todo*
-table.groupBy("colum_name", Aggregation.MEAN)  *todo*
-table.groupBy("colum_name", Aggregation.MEDIAN)  *todo*
+table.groupBy("column_name", Aggregation.SUM); *todo*
+table.groupBy("column_name", Aggregation.COUNT)
+table.groupBy("column_name", Aggregation.MAX)  *todo*
+table.groupBy("column_name", Aggregation.MIN)  *todo*
+table.groupBy("column_name", Aggregation.MEAN)  *todo*
+table.groupBy("column_name", Aggregation.MEDIAN)  *todo*
 table.groupBy(function(), function())
 ```
 

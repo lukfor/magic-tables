@@ -39,6 +39,14 @@ public class Table {
 		return columns.get(column).get(index);
 	}
 
+	public AbstractColumn getColumn(String name) {
+		return columns.get(name);
+	}
+
+	public AbstractColumn getColumn(int index) {
+		return columns.get(index);
+	}
+
 	public void forEachRow(final IRowProcessor processor) throws IOException {
 		assertsNotEmpty();
 		for (int i = 0; i < getRows().getSize(); i++) {
