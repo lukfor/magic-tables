@@ -6,20 +6,27 @@ Simple java API to read, transform, sort, filter and aggregate tables.
 ## Reading data
 
 ```java
-Table table = TableBuilder.fromCsvFile("data/dummy.csv", ',');
+Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
+Table table = TableBuilder.fromCsvFile("data/dummy.csv").withSeparator('\t').load();
 table.printSummary();
 ```
 
 ```java
-Table table = TableBuilder.fromXlsFile("data/dummy.xls");
+Table table = TableBuilder.fromXlsFile("data/dummy.xls").load();
 ```
 
-Default `TableBuilder` tries to find the correct datatype for each column. But you can also change the type of a column manually:
+By default `TableBuilder` tries to find the correct datatype for each column. But you can also change the type of a column manually:
 
 ```java
 table.setColumnType("id", ColumnType.INTEGER);
 table.setColumnType("population", ColumnType.DOUBLE);
 table.setColumnType("city", ColumnType.STRING);
+```
+
+In addition you can disable `columnTypeDetection` and load all columns as strings:
+
+```java
+Table table = TableBuilder.fromXlsFile("data/dummy.xls").withColumnTypeDetection(false).load();
 ```
 
 ## Inspecting data
@@ -29,7 +36,7 @@ Object o = table.get(rowIndex, "colum_name")
 Object o = table.get(rowIndex, columnIndex)
 ```
 
-`getRow` provided typesafe methods:
+`getRow` provides typesafe methods:
 ```java
 table.getRow(rowIndex).getObject("colum_name");
 table.getRow(rowIndex).getInteger("colum_name");

@@ -1,13 +1,11 @@
 package lukfor.tables;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import lukfor.tables.columns.AbstractColumn;
-import lukfor.tables.columns.types.IntegerColumn;
 import lukfor.tables.columns.types.StringColumn;
 import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.IRowProcessor;
@@ -24,7 +22,7 @@ public class Table {
 	private RowOperations rows;
 
 	private ColumnOperations columns;
-
+	
 	public Table(String name) {
 		this.name = name;
 		rows = new RowOperations(this);
