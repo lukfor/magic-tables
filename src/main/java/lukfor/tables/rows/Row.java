@@ -39,4 +39,13 @@ public class Row {
 		this.values.remove(column);
 	}
 
+	public boolean hasMissings() {
+		for (String key: values.keySet()) {
+			if (values.get(key) == null) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

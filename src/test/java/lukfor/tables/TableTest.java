@@ -39,7 +39,7 @@ public class TableTest extends TestCase {
 		assertEquals(2, table.get(2, "id"));
 
 	}
-	
+
 	public void testSortIntegerColumn() throws IOException {
 
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
@@ -126,6 +126,39 @@ public class TableTest extends TestCase {
 
 	}
 
+	public void testDropMissings() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/missings.csv").load();
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(7, table.getRows().getSize());
+		table.getRows().dropMissings();
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(4, table.getRows().getSize());
+
+	}
+
+	public void testDropMissingsByColumn() throws IOException {
+
+		// 2 missings in cloumn a
+		Table table = TableBuilder.fromCsvFile("data/missings.csv").load();
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(7, table.getRows().getSize());
+		assertEquals(2, table.getColumns().get("a").getMissings());
+		assertEquals(0, table.getColumns().get("d").getMissings());
+		table.getRows().dropMissings("a");
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(5, table.getRows().getSize());
+
+		// no missing in column d
+		table = TableBuilder.fromCsvFile("data/missings.csv").load();
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(7, table.getRows().getSize());
+		table.getRows().dropMissings("d");
+		assertEquals(5, table.getColumns().getSize());
+		assertEquals(7, table.getRows().getSize());
+
+	}
+
 	public void testAppendColumn() throws IOException {
 
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
@@ -204,18 +237,18 @@ public class TableTest extends TestCase {
 	}
 
 	public void testSummaryAndColumnTypeDetector() throws IOException {
-		
+
 		Table iris = TableBuilder.fromCsvFile("data/iris.csv").withSeparator(';').load();
 		AbstractColumn column = iris.getColumns().get("sepal.length");
 		assertTrue(column instanceof DoubleColumn);
 		assertEquals(4.3, column.getMin());
 		assertEquals(7.9, column.getMax());
 		assertEquals(0, column.getMissings());
-		
+
 	}
 
 	public void testGroupByKeyAndCount() throws IOException {
-		
+
 		Table table = TableBuilder.fromCsvFile("data/groups.csv").load();
 
 		Table groups = table.groupBy("group", Aggregations.COUNT);

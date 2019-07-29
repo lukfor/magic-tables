@@ -133,6 +133,30 @@ public class RowOperations {
 
 	}
 
+	public void dropMissings() throws IOException {
+		IRowFilter filter = new IRowFilter() {			
+			@Override
+			public boolean accepts(Row row) throws IOException {
+				return row.hasMissings();
+			}
+		};
+		RowSelectionProcessor processor = new RowSelectionProcessor(filter);
+		table.forEachRow(processor);
+		drop(processor.getBitmask());
+	}
+	
+	public void dropMissings(String column) throws IOException {
+		IRowFilter filter = new IRowFilter() {			
+			@Override
+			public boolean accepts(Row row) throws IOException {
+				return (row.getObject(column) == null);
+			}
+		};
+		RowSelectionProcessor processor = new RowSelectionProcessor(filter);
+		table.forEachRow(processor);
+		drop(processor.getBitmask());
+	}
+	
 	public void selectByRegEx(String column, String regExp) throws IOException {
 		select(new RowValueRegExFilter(column, regExp));
 	}
