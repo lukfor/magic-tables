@@ -308,7 +308,7 @@ public class Table {
 			row.setString("column", column.getName());
 			row.setString("type", column.getType());
 			row.setString("min", column.getMin());
-			row.setString("mean", column.getMax());
+			row.setString("mean", column.getMean());
 			row.setString("max", column.getMax());
 			row.setString("missings", column.getMissings());
 			row.setString("n", (column.getSize() - column.getMissings()));
