@@ -60,7 +60,6 @@ public class ColumnOperations {
 			throw new IOException("Duplicate column '" + column + ".");
 		}
 
-		System.out.println("Adding column '" + column + "'...");
 		columns.add(column);
 		if (builder != null) {
 

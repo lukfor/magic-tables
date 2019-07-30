@@ -195,9 +195,8 @@ public class RowOperations {
 
 		int rowsAfter = getSize();
 
-		System.out.println("Filterd table.");
-		System.out.println("  #Rows before filtering: " + rowsBefore);
-		System.out.println("  #Rows after filtering: " + rowsAfter);
+		System.out.println("Filtering table " + table.getName() + "...");
+		System.out.println("Filtered table. Rows after filtering: " + rowsAfter);
 
 	}
 

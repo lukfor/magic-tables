@@ -153,6 +153,9 @@ public class Table {
 
 	public void merge(final Table table2, final String columnTable1, final String columnTable2) throws IOException {
 
+		System.out.println("Merging table " + getName() + " with table " + table2.getName() + " on " + columnTable1
+				+ "=" + columnTable2 + "...");
+
 		final List<String> columnsTable2 = new Vector<String>();
 
 		// add all columns from table expect join column
@@ -188,6 +191,8 @@ public class Table {
 			}
 		});
 
+		System.out.println("Merged tables. New size [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
+
 	}
 
 	public Table cloneStructure(String name) throws IOException {
@@ -213,6 +218,10 @@ public class Table {
 		return table;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -266,9 +275,12 @@ public class Table {
 		}
 
 		String[][] data = getRows().data(start, end);
+		System.out.println();
+		System.out.println(name + ":");
 		System.out.print(FlipTable.of(header, data));
 		System.out.println("Showing " + (start + 1) + " to " + (end + 1) + " of " + getRows().getSize() + " entries, "
 				+ getColumns().getSize() + " total columns");
+		System.out.println();
 	}
 
 	public void print() throws IOException {
