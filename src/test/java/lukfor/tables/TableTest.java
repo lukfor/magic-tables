@@ -7,7 +7,8 @@ import java.util.List;
 import genepi.io.FileUtil;
 import junit.framework.TestCase;
 import lukfor.tables.columns.AbstractColumn;
-import lukfor.tables.columns.IValueBuilder;
+import lukfor.tables.columns.IApplyFunction;
+import lukfor.tables.columns.IBuildValueFunction;
 import lukfor.tables.columns.types.DoubleColumn;
 import lukfor.tables.columns.types.IntegerColumn;
 import lukfor.tables.io.TableBuilder;
@@ -224,7 +225,7 @@ public class TableTest extends TestCase {
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 		assertEquals(3, table.getColumns().getSize());
 		assertEquals(3, table.getRows().getSize());
-		table.getColumns().append(new IntegerColumn("id_2"), new IValueBuilder() {
+		table.getColumns().append(new IntegerColumn("id_2"), new IBuildValueFunction() {
 			public Object buildValue(Row row) throws IOException {
 				return row.getInteger("id") * 2;
 			}
@@ -234,6 +235,30 @@ public class TableTest extends TestCase {
 		assertEquals(0, table.getRows().get(0).getInteger("id_2"));
 		assertEquals(2, table.get(1, "id_2"));
 		assertEquals(4, table.get(2, 3));
+
+	}
+	
+	public void testApply() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
+		assertEquals(3, table.getColumns().getSize());
+		assertEquals(3, table.getRows().getSize());
+		assertEquals(0, table.get(0, "id"));
+		assertEquals(1, table.get(1, "id"));
+		assertEquals(2, table.get(2, "id"));
+
+		table.getColumn("id").apply(new IApplyFunction() {
+			@Override
+			public Object apply(Object value) {
+				Integer integerValue = (Integer) value;
+				return integerValue * 2;
+			}
+		});
+		assertEquals(3, table.getColumns().getSize());
+		assertEquals(3, table.getRows().getSize());
+		assertEquals(0, table.get(0, "id"));
+		assertEquals(2, table.get(1, "id"));
+		assertEquals(4, table.get(2, "id"));
 
 	}
 

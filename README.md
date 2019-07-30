@@ -96,6 +96,7 @@ table.fillMissings("value");
 table.getColumn("column_name").fillMissings("value");
 table.replaceValue("old","new");
 table.getColumn("column_name").replaceValue("old","new");
+table.getColumn("column_name").apply(function);
 ```
 
 ## Transforming data

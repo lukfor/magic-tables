@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import lukfor.tables.rows.Row;
+
 public abstract class AbstractColumn {
 
 	protected List<Object> storage = new Vector<Object>();
@@ -111,6 +113,14 @@ public abstract class AbstractColumn {
 			if (storage.get(i) == null) {
 				storage.set(i, value);
 			}
+		}
+	}
+
+	public void apply(IApplyFunction function) throws IOException {
+		for (int i = 0; i < storage.size(); i++) {
+			Object value = storage.get(i);
+			Object newValue = function.apply(value);
+			storage.set(i, newValue);
 		}
 	}
 
@@ -216,15 +226,15 @@ public abstract class AbstractColumn {
 		if (mean != null) {
 			out.println("  Mean.: " + mean);
 		}
-		/*Object median = getMedian();
-		if (median != null) {
-			out.println("  Median.: " + median);
-		}*/
+		/*
+		 * Object median = getMedian(); if (median != null) { out.println("  Median.: "
+		 * + median); }
+		 */
 		Object max = getMax();
 		if (max != null) {
 			out.println("  Max.: " + max);
 		}
 	}
-	
+
 	public abstract AbstractColumn cloneStructure();
 }

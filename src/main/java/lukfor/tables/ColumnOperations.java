@@ -7,7 +7,7 @@ import java.util.Vector;
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.ColumnFactory;
 import lukfor.tables.columns.ColumnType;
-import lukfor.tables.columns.IValueBuilder;
+import lukfor.tables.columns.IBuildValueFunction;
 import lukfor.tables.columns.filters.ColumnNameFilter;
 import lukfor.tables.columns.filters.ColumnNameRegExFilter;
 import lukfor.tables.columns.filters.IColumnFilter;
@@ -48,7 +48,7 @@ public class ColumnOperations {
 		append(column, null);
 	}
 
-	public void append(final AbstractColumn column, final IValueBuilder builder) throws IOException {
+	public void append(final AbstractColumn column, final IBuildValueFunction builder) throws IOException {
 
 		if (get(column.getName()) != null) {
 			throw new IOException("Duplicate column '" + column + ".");
