@@ -22,7 +22,7 @@ public class RowOperations {
 	}
 
 	public Row get(int index) {
-		Row row = new Row();
+		Row row = new Row(index);
 		for (AbstractColumn column : table.storage) {
 			Object value = column.get(index);
 			row.set(column.getName(), value);

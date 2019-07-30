@@ -45,7 +45,13 @@ public class ColumnOperations {
 	}
 
 	public void append(AbstractColumn column) throws IOException {
-		append(column, null);
+		append(column, new IBuildValueFunction() {
+			
+			@Override
+			public Object buildValue(Row row) throws IOException {
+				return null;
+			}
+		});
 	}
 
 	public void append(final AbstractColumn column, final IBuildValueFunction builder) throws IOException {

@@ -18,17 +18,24 @@ public class TableWriter {
 	}
 
 	public static void writeToCsv(Table table, String filename) throws IOException {
-		writeToCsv(table, filename, ',');
+		writeToCsv(table, filename, ',', false);
 	}
 
 	public static void writeToCsv(Table table, File file, char outputSeparator) throws IOException {
-		writeToCsv(table, file.getAbsolutePath(), outputSeparator);
+		writeToCsv(table, file.getAbsolutePath(), outputSeparator, false);
 	}
 
 	public static void writeToCsv(Table table, String filename, char outputSeparator) throws IOException {
 
 		System.out.println("Writing file " + filename + "...");
-		CsvTableWriter writer = new CsvTableWriter(filename, outputSeparator, false);
+		writeToCsv(table, filename, outputSeparator, false);
+
+	}
+	
+	public static void writeToCsv(Table table, String filename, char outputSeparator, boolean quote) throws IOException {
+
+		System.out.println("Writing file " + filename + "...");
+		CsvTableWriter writer = new CsvTableWriter(filename, outputSeparator, quote);
 		writeToTableWriter(table, writer);
 
 	}

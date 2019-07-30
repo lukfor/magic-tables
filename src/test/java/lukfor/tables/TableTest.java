@@ -303,7 +303,11 @@ public class TableTest extends TestCase {
 		assertEquals(4, table2.getColumns().getSize());
 		table.merge(table2, "id");
 		assertEquals(6, table.getColumns().getSize());
-
+		assertEquals(3, table.getRows().getSize());		
+		File output = File.createTempFile("test", ".csv");
+		TableWriter.writeToCsv(table, output);
+		assertEquals(FileUtil.readFileAsString("data/dummy_joined.csv"),
+				FileUtil.readFileAsString(output.getAbsolutePath()));
 	}
 
 	public void testAppendRow() throws IOException {

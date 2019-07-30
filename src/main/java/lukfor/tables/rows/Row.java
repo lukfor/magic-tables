@@ -10,7 +10,13 @@ public class Row {
 
 	private Map<String, Object> values = new HashMap<String, Object>();
 
+	private int index;
+	
 	public Row() {
+	}
+	
+	public Row(int index) {
+		this.index = index;
 	}
 
 	public Object getObject(String column) throws IOException {
@@ -49,10 +55,6 @@ public class Row {
 		}
 	}
 
-	public void remove(String column) {
-		this.values.remove(column);
-	}
-
 	public boolean hasMissings() {
 		for (String key : values.keySet()) {
 			if (values.get(key) == null) {
@@ -66,4 +68,8 @@ public class Row {
 		return values.hashCode();
 	}
 
+	public int getIndex() {
+		return index;
+	}
+	
 }

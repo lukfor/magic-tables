@@ -159,8 +159,8 @@ public class Table {
 		for (int i = 0; i < table2.getColumns().getSize(); i++) {
 			AbstractColumn columTable2 = table2.getColumns().get(i);
 			if (!columTable2.getName().equals(columnTable2)) {
-				columns.append(new StringColumn(columTable2.getName()));
-				columns.setType(columTable2.getName(), columTable2.getType());
+				AbstractColumn newColumn = columTable2.cloneStructure();
+				columns.append(newColumn);
 				columnsTable2.add(columTable2.getName());
 			}
 		}
@@ -171,14 +171,19 @@ public class Table {
 
 				Object value = row.getObject(columnTable1);
 				List<Row> rowsTable2 = table2.getRows().getAll(columnTable2, value);
-				if (rowsTable2.size() != 1) {
-					throw new IOException("simple merge not possible. No one to one mapping found.");
-				}
-				for (Row rowTable2 : rowsTable2) {
-					for (String columTable2 : columnsTable2) {
-						Object valueTable2 = rowTable2.getObject(columTable2);
-						row.set(columTable2, valueTable2);
+				if (rowsTable2.size() == 1) {
+					for (Row rowTable2 : rowsTable2) {
+						for (String columnTable2 : columnsTable2) {
+							Object valueTable2 = rowTable2.getObject(columnTable2);
+							getColumn(columnTable2).set(row.getIndex(), valueTable2);
+						}
 					}
+				} else if (rowsTable2.size() == 0) {
+					for (String columnTable2 : columnsTable2) {
+						getColumn(columnTable2).set(row.getIndex(), null);
+					}
+				} else {
+					throw new IOException("simple merge not possible. No one to one mapping found.");
 				}
 			}
 		});
@@ -238,7 +243,7 @@ public class Table {
 
 	public void printFirst(int n) throws IOException {
 		n = Math.min(n, getRows().getSize());
-		printBetween(0, n-1);
+		printBetween(0, n - 1);
 	}
 
 	public void printLast(int n) throws IOException {
@@ -253,7 +258,6 @@ public class Table {
 		start = Math.max(start, 0);
 		end = Math.min(end, height);
 
-		
 		String[] columns = getColumns().getNames();
 		String[] header = new String[columns.length + 1];
 		header[0] = "";
