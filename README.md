@@ -161,6 +161,7 @@ sdk install groovy
 ```
 
 ```groovy
+@GrabResolver(name='genepi', root='https://raw.github.com/genepi/maven-repository/mvn-repo/')
 @Grab('lukfor:tables:0.0.1')
 
 import lukfor.tables.*
@@ -171,11 +172,18 @@ import lukfor.tables.columns.types.*
 
 Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 
-table.getColumns().append(new StringColumn("id_2"), new IValueBuilder() {
-  public String buildValue(Row row) throws IOException {
-    return row.getInteger("id") * 2 + "";
+table.getColumns().append(new IntegerColumn("id_2"), new IBuildValueFunction() {
+  public Integer buildValue(Row row) throws IOException {
+    return row.getInteger("id") * 2;
   }
 });
 
-TableWriter.writeToCsv(table, "results/dummy.csv", ',' as char);
+table.printSummary();
+table.print();
+
+table.getRows().selectByRegEx("b", "r|z");
+table.print();
+
+table.getColumns().selectByRegEx("id.*");
+table.print();
 ```
