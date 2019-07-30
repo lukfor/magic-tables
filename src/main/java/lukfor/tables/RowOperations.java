@@ -207,17 +207,20 @@ public class RowOperations {
 	}
 
 	public String[][] data() throws IOException {
-		return data(getSize());
+		return data(0, getSize() - 1);
 	}
 
-	public String[][] data(int height) throws IOException {
+	public String[][] data(int start, int end) throws IOException {
+
+		int height = (end - start) + 1;
+
 		int width = table.getColumns().getSize() + 1;
 		String[][] data = new String[height][];
 		for (int i = 0; i < height; i++) {
 			data[i] = new String[width];
-			data[i][0] = (i + 1) + "";
+			data[i][0] = (i + start + 1) + "";
 			for (int j = 0; j < width - 1; j++) {
-				Object value = table.getColumn(j).get(i);
+				Object value = table.getColumn(j).get(i + start);
 				String string = table.getColumn(j).objectToValue(value);
 				data[i][j + 1] = string;
 			}

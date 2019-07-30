@@ -236,30 +236,43 @@ public class Table {
 		}
 	}
 
-	public void print(int n) throws IOException {
+	public void printFirst(int n) throws IOException {
+		n = Math.min(n, getRows().getSize());
+		printBetween(0, n-1);
+	}
 
-		if (n > getRows().getSize()) {
-			n = getRows().getSize();
-		}
+	public void printLast(int n) throws IOException {
+		int height = getRows().getSize() - 1;
+		int start = Math.max(height - n, 0);
+		printBetween(start, height);
+	}
 
+	public void printBetween(int start, int end) throws IOException {
+
+		int height = getRows().getSize() - 1;
+		start = Math.max(start, 0);
+		end = Math.min(end, height);
+
+		
 		String[] columns = getColumns().getNames();
 		String[] header = new String[columns.length + 1];
 		header[0] = "";
 		for (int i = 0; i < columns.length; i++) {
 			header[i + 1] = columns[i];
 		}
-		String[][] data = getRows().data(n);
+
+		String[][] data = getRows().data(start, end);
 		System.out.print(FlipTable.of(header, data));
-		System.out.println("Showing 1 to " + n + " of " + getRows().getSize() + " entries, " + getColumns().getSize()
-				+ " total columns");
+		System.out.println("Showing " + (start + 1) + " to " + (end + 1) + " of " + getRows().getSize() + " entries, "
+				+ getColumns().getSize() + " total columns");
 	}
 
 	public void print() throws IOException {
-		print(25);
+		printFirst(25);
 	}
 
 	public void printAll() throws IOException {
-		print(getRows().getSize());
+		printFirst(getRows().getSize());
 	}
 
 	public void printSummary() throws IOException {

@@ -9,6 +9,7 @@ Simple java API to read, transform, sort, filter and aggregate tables.
 Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 Table table = TableBuilder.fromCsvFile("data/dummy.csv").withSeparator('\t').load();
 table.printSummary();
+table.print()
 ```
 
 ```java
@@ -45,9 +46,11 @@ table.getRow(rowIndex).getString("column_name");
 ```
 
 ```java
-table.print()
+table.print() (prints first 25 rows)
 table.printFirst(n)
 table.printLast(n)
+table.printAll()
+table.printBetween(index1, index2)
 table.getColumns().getMissings()
 table.getColumns().getUniqueValues()
 table.getColumns().getNames()
@@ -79,7 +82,7 @@ table.getRows().drop(bitmask)
 
 ```java
 table.getColumns().select("name1","name2","name3", ...)
-table.getColumns().selectByRegEx("col*");
+table.getColumns().selectByRegEx("col_.*");
 table.getColumns().select(filter);
 table.getColumns().drop("name1","name2","name3", ...)
 table.getColumns().dropByRegEx("col*");
@@ -166,7 +169,7 @@ import lukfor.tables.rows.*
 import lukfor.tables.columns.*
 import lukfor.tables.columns.types.*
 
-Table table = TableBuilder.fromCsvFile("data/dummy.csv", ',' as char);
+Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 
 table.getColumns().append(new StringColumn("id_2"), new IValueBuilder() {
   public String buildValue(Row row) throws IOException {
