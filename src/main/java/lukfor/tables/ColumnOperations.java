@@ -62,7 +62,7 @@ public class ColumnOperations {
 
 				public void process(Row row) throws IOException {
 					Object value = builder.buildValue(row);
-					if (column.accepts(value)) {
+					if (value == null || column.accepts(value)) {
 						column.add(value);
 					} else {
 						throw new IOException("Wrong class: " + value.getClass());

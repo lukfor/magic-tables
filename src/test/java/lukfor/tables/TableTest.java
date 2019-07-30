@@ -26,7 +26,6 @@ public class TableTest extends TestCase {
 		assertEquals(0, table.get(0, "id"));
 		assertEquals(1, table.get(1, "id"));
 		assertEquals(2, table.get(2, "id"));
-
 	}
 
 	public void testLoadXls() throws IOException {
@@ -37,6 +36,7 @@ public class TableTest extends TestCase {
 		assertEquals(0, table.get(0, "id"));
 		assertEquals(1, table.get(1, "id"));
 		assertEquals(2, table.get(2, "id"));
+		table.print();
 
 	}
 

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.jakewharton.fliptables.FlipTable;
+
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.types.StringColumn;
 import lukfor.tables.rows.IRowAggregator;
@@ -191,6 +193,21 @@ public class Table {
 		return table;
 	}
 
+	public Table clone() {
+
+		Table table = null;
+		try {
+			table = cloneStructure("cloned");
+			for (AbstractColumn column : storage) {
+				table.getColumn(column.getName()).copyDataFrom(column);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return table;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -219,18 +236,56 @@ public class Table {
 		}
 	}
 
-	public void view() {
+	public void print(int n) throws IOException {
 
+		if (n > getRows().getSize()) {
+			n = getRows().getSize();
+		}
+
+		String[] columns = getColumns().getNames();
+		String[] header = new String[columns.length + 1];
+		header[0] = "";
+		for (int i = 0; i < columns.length; i++) {
+			header[i + 1] = columns[i];
+		}
+		String[][] data = getRows().data(n);
+		System.out.print(FlipTable.of(header, data));
+		System.out.println("Showing 1 to " + n + " of " + getRows().getSize() + " entries, " + getColumns().getSize()
+				+ " total columns");
+	}
+
+	public void print() throws IOException {
+		print(25);
+	}
+
+	public void printAll() throws IOException {
+		print(getRows().getSize());
 	}
 
 	public void printSummary() throws IOException {
 
 		System.out.println(name + " [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
 
+		Table table = new Table(name + ":summary");
+		table.getColumns().append(new StringColumn("column"));
+		table.getColumns().append(new StringColumn("type"));
+		table.getColumns().append(new StringColumn("min"));
+		table.getColumns().append(new StringColumn("mean"));
+		table.getColumns().append(new StringColumn("max"));
+		table.getColumns().append(new StringColumn("missings"));
+		table.getColumns().append(new StringColumn("n"));
 		for (AbstractColumn column : storage) {
-			column.printSummary();
-			System.out.println();
+			Row row = new Row();
+			row.setString("column", column.getName());
+			row.setString("type", column.getType());
+			row.setString("min", column.getMin());
+			row.setString("mean", column.getMax());
+			row.setString("max", column.getMax());
+			row.setString("missings", column.getMissings());
+			row.setString("n", (column.getSize() - column.getMissings()));
+			table.getRows().append(row);
 		}
+		table.printAll();
 	}
 
 }

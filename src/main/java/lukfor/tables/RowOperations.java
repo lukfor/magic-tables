@@ -206,4 +206,23 @@ public class RowOperations {
 		return table.storage.get(0).getSize();
 	}
 
+	public String[][] data() throws IOException {
+		return data(getSize());
+	}
+
+	public String[][] data(int height) throws IOException {
+		int width = table.getColumns().getSize() + 1;
+		String[][] data = new String[height][];
+		for (int i = 0; i < height; i++) {
+			data[i] = new String[width];
+			data[i][0] = (i + 1) + "";
+			for (int j = 0; j < width - 1; j++) {
+				Object value = table.getColumn(j).get(i);
+				String string = table.getColumn(j).objectToValue(value);
+				data[i][j + 1] = string;
+			}
+		}
+		return data;
+	}
+
 }

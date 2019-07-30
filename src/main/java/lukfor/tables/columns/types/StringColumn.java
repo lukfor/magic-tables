@@ -49,6 +49,11 @@ public class StringColumn extends AbstractColumn {
 	}
 	
 	@Override
+	public boolean isMissingValue(Object object) {		
+		return object == null || object.toString().isEmpty();
+	}
+	
+	@Override
 	public AbstractColumn cloneStructure() {
 		return new StringColumn(getName());
 	}

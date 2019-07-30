@@ -1,10 +1,22 @@
 package lukfor.tables.columns.types;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.ColumnType;
 
 public class DoubleColumn extends AbstractColumn {
 
+	public static NumberFormat FORMAT;
+	
+	static {
+		FORMAT = NumberFormat.getInstance(new Locale("en", "US"));
+		FORMAT.setGroupingUsed(false);
+		FORMAT.setMinimumFractionDigits(3);
+		FORMAT.setMaximumFractionDigits(3);
+	}
+	
 	public DoubleColumn(String name) {
 		setName(name);
 	}
@@ -26,7 +38,7 @@ public class DoubleColumn extends AbstractColumn {
 	@Override
 	public String objectToValue(Object data) {
 		if (data != null) {
-			return data.toString();
+			return FORMAT.format(data);
 		} else {
 			return "";
 		}
@@ -105,4 +117,9 @@ public class DoubleColumn extends AbstractColumn {
 		return new DoubleColumn(getName());
 	}
 
+	@Override
+	public boolean isMissingValue(Object object) {
+		return object == null || object.toString().isEmpty();
+	}
+	
 }

@@ -106,4 +106,8 @@ public class IntegerColumn extends AbstractColumn {
 		return new IntegerColumn(getName());
 	}
 	
+	@Override
+	public boolean isMissingValue(Object object) {
+		return object == null || object.toString().isEmpty();
+	}
 }

@@ -41,12 +41,17 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>genepi</groupId>
 			<artifactId>genepi-io</artifactId>
 			<version>1.0.10</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jakewharton.fliptables</groupId>
+			<artifactId>fliptables</artifactId>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import lukfor.tables.rows.Row;
-
 public abstract class AbstractColumn {
 
 	protected List<Object> storage = new Vector<Object>();
@@ -50,7 +48,11 @@ public abstract class AbstractColumn {
 	public abstract String objectToValue(Object data);
 
 	public void add(Object data) {
-		storage.add(data);
+		if (isMissingValue(data)) {
+			storage.add(null);
+		} else {
+			storage.add(data);
+		}
 	}
 
 	public Object get(int index) {
@@ -187,16 +189,6 @@ public abstract class AbstractColumn {
 		return null;
 	}
 
-	public Integer getMissingValue() {
-		int count = 0;
-		for (Object o : storage) {
-			if (o == null) {
-				count++;
-			}
-		}
-		return count;
-	}
-
 	public String getSummary() {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps;
@@ -215,7 +207,7 @@ public abstract class AbstractColumn {
 
 	public void printSummary(PrintStream out) {
 		out.println(name + " [" + getType() + "] :");
-		int missings = getMissingValue();
+		int missings = getMissings();
 		out.println("  N: " + (getSize() - missings));
 		out.println("  Missings: " + missings);
 		Object min = getMin();
@@ -235,6 +227,8 @@ public abstract class AbstractColumn {
 			out.println("  Max.: " + max);
 		}
 	}
+
+	public abstract boolean isMissingValue(Object object);
 
 	public abstract AbstractColumn cloneStructure();
 }

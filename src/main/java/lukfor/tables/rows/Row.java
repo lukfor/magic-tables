@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import lukfor.tables.columns.types.DoubleColumn;
+
 public class Row {
 
 	private Map<String, Object> values = new HashMap<String, Object>();
@@ -35,21 +37,33 @@ public class Row {
 		this.values.put(column, value);
 	}
 
+	public void setString(String column, Object value) {
+		if (value != null) {
+			
+			if (value instanceof Double) {
+				value = DoubleColumn.FORMAT.format(value);
+			}			
+			this.values.put(column, value.toString());
+		} else {
+			this.values.put(column, null);
+		}
+	}
+
 	public void remove(String column) {
 		this.values.remove(column);
 	}
 
 	public boolean hasMissings() {
-		for (String key: values.keySet()) {
+		for (String key : values.keySet()) {
 			if (values.get(key) == null) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public int getHashCode() {
 		return values.hashCode();
 	}
-	
+
 }
