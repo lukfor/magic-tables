@@ -58,7 +58,6 @@ table.getColumn("column_name").getSummary()
 table.getColumn("column_name").getMean()
 table.getColumn("column_name").getMin()
 table.getColumn("column_name").getMax()
-table.getColumn("column_name").getMedian()
 table.getColumn("column_name").getMissings()
 table.getColumn("column_name").getUniqueValues()
 table.getRows().getAll("column_name", "value")
@@ -117,23 +116,23 @@ table.getRows().sortDescBy("column_name");
 ## Joining and reshaping
 
 ```java
+table.append(table2)
+
 table.melt(..) *todo*
 table.merge(table2, LEFT);
-table.merge | RIGHT | OUTER | INNER) *todo*
+table.merge( RIGHT | OUTER | INNER) *todo*
 table.pivot(..) *todo*
-table.concat(table2) (or append?) *todo*
 ```
 
 ## Aggregating data
 
 ```java
-table.groupBy("column_name", Aggregation.SUM); *todo*
-table.groupBy("column_name", Aggregation.COUNT)
-table.groupBy("column_name", Aggregation.MAX)  *todo*
-table.groupBy("column_name", Aggregation.MIN)  *todo*
-table.groupBy("column_name", Aggregation.MEAN)  *todo*
-table.groupBy("column_name", Aggregation.MEDIAN)  *todo*
-table.groupBy(function(), function())
+table.groupBy("column_name").count()
+table.groupBy("column_name").sum("value_name")
+table.groupBy("column_name").min("value_name")
+table.groupBy("column_name").max("value_name")
+table.groupBy("column_name").mean("value_name")
+table.groupBy(mapper(), aggregator())
 ```
 
 ## Writing data

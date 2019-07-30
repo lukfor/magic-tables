@@ -34,6 +34,12 @@ public class IntegerColumn extends AbstractColumn {
 
 	@Override
 	public int compare(Object value1, Object value2) {
+		if (value1 == null) {
+			value1 = Integer.MIN_VALUE;
+		}
+		if (value2 == null) {
+			value2 = Integer.MIN_VALUE;
+		}
 		return ((Integer) value1).compareTo((Integer) value2);
 	}
 
@@ -43,8 +49,8 @@ public class IntegerColumn extends AbstractColumn {
 	}
 
 	@Override
-	public Double getSum() {
-		double sum = 0;
+	public Object getSum() {
+		int sum = 0;
 		for (Object o : storage) {
 			if (o != null) {
 				Integer i = (Integer) o;
@@ -55,7 +61,7 @@ public class IntegerColumn extends AbstractColumn {
 	}
 
 	@Override
-	public Double getMean() {
+	public Object getMean() {
 		double sum = 0;
 		int count = 0;
 		for (Object o : storage) {
@@ -68,8 +74,9 @@ public class IntegerColumn extends AbstractColumn {
 		return sum / (double) count;
 	}
 
-	public Double getMin() {
-		double min = Double.MAX_VALUE;
+	@Override
+	public Object getMin() {
+		int min = Integer.MAX_VALUE;
 		for (Object o : storage) {
 			if (o != null) {
 				Integer i = (Integer) o;
@@ -81,8 +88,9 @@ public class IntegerColumn extends AbstractColumn {
 		return min;
 	}
 
-	public Double getMax() {
-		double max = Double.MIN_VALUE;
+	@Override
+	public Object getMax() {
+		int max = Integer.MIN_VALUE;
 		for (Object o : storage) {
 			if (o != null) {
 				Integer i = (Integer) o;
@@ -92,6 +100,10 @@ public class IntegerColumn extends AbstractColumn {
 			}
 		}
 		return max;
+	}
+	@Override
+	public AbstractColumn cloneStructure() {
+		return new IntegerColumn(getName());
 	}
 	
 }

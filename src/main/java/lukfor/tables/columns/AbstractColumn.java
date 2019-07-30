@@ -161,23 +161,19 @@ public abstract class AbstractColumn {
 
 	}
 
-	public Double getSum() {
+	public Object getSum() {
 		return null;
 	}
 
-	public Double getMean() {
+	public Object getMean() {
 		return null;
 	}
 
-	public Double getMin() {
+	public Object getMin() {
 		return null;
 	}
 
-	public Double getMax() {
-		return null;
-	}
-
-	public Double getMedian() {
+	public Object getMax() {
 		return null;
 	}
 
@@ -212,21 +208,23 @@ public abstract class AbstractColumn {
 		int missings = getMissingValue();
 		out.println("  N: " + (getSize() - missings));
 		out.println("  Missings: " + missings);
-		Double min = getMin();
+		Object min = getMin();
 		if (min != null) {
 			out.println("  Min.: " + min);
 		}
-		Double mean = getMean();
+		Object mean = getMean();
 		if (mean != null) {
 			out.println("  Mean.: " + mean);
 		}
-		Double median = getMedian();
+		/*Object median = getMedian();
 		if (median != null) {
 			out.println("  Median.: " + median);
-		}
-		Double max = getMax();
+		}*/
+		Object max = getMax();
 		if (max != null) {
 			out.println("  Max.: " + max);
 		}
 	}
+	
+	public abstract AbstractColumn cloneStructure();
 }

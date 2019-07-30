@@ -1,10 +1,14 @@
-package lukfor.tables.rows;
+package lukfor.tables.rows.processors;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
+import lukfor.tables.rows.IRowMapper;
+import lukfor.tables.rows.IRowProcessor;
+import lukfor.tables.rows.Row;
 
 public class RowGroupProcessor implements IRowProcessor{
 

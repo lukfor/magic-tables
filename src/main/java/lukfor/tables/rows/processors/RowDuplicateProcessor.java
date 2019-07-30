@@ -1,10 +1,13 @@
-package lukfor.tables.rows;
+package lukfor.tables.rows.processors;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+
+import lukfor.tables.rows.IRowProcessor;
+import lukfor.tables.rows.Row;
 
 public class RowDuplicateProcessor implements IRowProcessor {
 

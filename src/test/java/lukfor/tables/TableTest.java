@@ -6,15 +6,12 @@ import java.util.List;
 
 import genepi.io.FileUtil;
 import junit.framework.TestCase;
-import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
-import lukfor.tables.columns.ColumnType;
 import lukfor.tables.columns.IValueBuilder;
 import lukfor.tables.columns.types.DoubleColumn;
 import lukfor.tables.columns.types.IntegerColumn;
 import lukfor.tables.io.TableBuilder;
 import lukfor.tables.io.TableWriter;
-import lukfor.tables.rows.Aggregations;
 import lukfor.tables.rows.Row;
 import lukfor.tables.rows.filters.IRowFilter;
 
@@ -314,15 +311,89 @@ public class TableTest extends TestCase {
 
 		Table table = TableBuilder.fromCsvFile("data/groups.csv").load();
 
-		Table groups = table.groupBy("group", Aggregations.COUNT);
-		groups.getColumns().setType("key", ColumnType.INTEGER);
-		groups.getRows().sortAscBy("key");
+		Table groups = table.groupBy("group").count();
+		groups.getRows().sortAscBy("group");
 
 		assertEquals(2, groups.getColumns().getSize());
 		assertEquals(3, groups.getRows().getSize());
+		assertEquals(1, groups.get(0, "group"));
+		assertEquals(2, groups.get(1, "group"));
+		assertEquals(3, groups.get(2, "group"));
 		assertEquals(3, groups.get(0, "count"));
 		assertEquals(2, groups.get(1, "count"));
 		assertEquals(4, groups.get(2, "count"));
+
+	}
+
+	public void testGroupByKeyAndSum() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/groups.csv").load();
+
+		Table groups = table.groupBy("group").sum("value");
+		groups.getRows().sortAscBy("group");
+
+		assertEquals(2, groups.getColumns().getSize());
+		assertEquals(3, groups.getRows().getSize());
+		assertEquals(1, groups.get(0, "group"));
+		assertEquals(2, groups.get(1, "group"));
+		assertEquals(3, groups.get(2, "group"));
+		assertEquals(6, groups.get(0, "sum"));
+		assertEquals(3, groups.get(1, "sum"));
+		assertEquals(10, groups.get(2, "sum"));
+
+	}
+
+	public void testGroupByKeyAndMin() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/groups.csv").load();
+
+		Table groups = table.groupBy("group").min("value");
+		groups.getRows().sortAscBy("group");
+
+		assertEquals(2, groups.getColumns().getSize());
+		assertEquals(3, groups.getRows().getSize());
+		assertEquals(1, groups.get(0, "group"));
+		assertEquals(2, groups.get(1, "group"));
+		assertEquals(3, groups.get(2, "group"));
+		assertEquals(1, groups.get(0, "min"));
+		assertEquals(1, groups.get(1, "min"));
+		assertEquals(1, groups.get(2, "min"));
+
+	}
+
+	public void testGroupByKeyAndMax() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/groups.csv").load();
+
+		Table groups = table.groupBy("group").max("value");
+		groups.getRows().sortAscBy("group");
+
+		assertEquals(2, groups.getColumns().getSize());
+		assertEquals(3, groups.getRows().getSize());
+		assertEquals(1, groups.get(0, "group"));
+		assertEquals(2, groups.get(1, "group"));
+		assertEquals(3, groups.get(2, "group"));
+		assertEquals(3, groups.get(0, "max"));
+		assertEquals(2, groups.get(1, "max"));
+		assertEquals(4, groups.get(2, "max"));
+
+	}
+
+	public void testGroupByKeyAndMean() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/groups.csv").load();
+
+		Table groups = table.groupBy("group").mean("value");
+		groups.getRows().sortAscBy("group");
+
+		assertEquals(2, groups.getColumns().getSize());
+		assertEquals(3, groups.getRows().getSize());
+		assertEquals(1, groups.get(0, "group"));
+		assertEquals(2, groups.get(1, "group"));
+		assertEquals(3, groups.get(2, "group"));
+		assertEquals(2.0, groups.get(0, "mean"));
+		assertEquals(1.5, groups.get(1, "mean"));
+		assertEquals(2.5, groups.get(2, "mean"));
 
 	}
 

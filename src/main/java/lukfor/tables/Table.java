@@ -7,11 +7,13 @@ import java.util.Vector;
 
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.types.StringColumn;
+import lukfor.tables.rows.IRowAggregator;
 import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.IRowProcessor;
-import lukfor.tables.rows.IRowReducer;
 import lukfor.tables.rows.Row;
-import lukfor.tables.rows.RowGroupProcessor;
+import lukfor.tables.rows.processors.RowCopyProcessor;
+import lukfor.tables.rows.processors.RowGroupProcessor;
+import lukfor.tables.utils.GroupByBuilder;
 
 public class Table {
 
@@ -63,34 +65,52 @@ public class Table {
 		return rows;
 	}
 
-	public Table groupBy(final String column, IRowReducer aggregation) throws IOException {
+	public GroupByBuilder groupBy(final String column) throws IOException {
+
+		IRowMapper mapper = new IRowMapper() {
+			@Override
+			public Object getKey(Row row) throws IOException {
+				return row.getObject(column);
+			}
+		};
+
+		return new GroupByBuilder(this, mapper, column);
+	}
+
+	public Table groupBy(final String column, IRowAggregator aggregator) throws IOException {
+
 		return groupBy(new IRowMapper() {
 			@Override
 			public Object getKey(Row row) throws IOException {
 				return row.getObject(column);
 			}
-		}, aggregation);
+		}, aggregator);
+
 	}
 
-	public Table groupBy(IRowMapper mapper, IRowReducer reducer) throws IOException {
+	public Table groupBy(IRowMapper mapper, IRowAggregator aggregator) throws IOException {
 		RowGroupProcessor processor = new RowGroupProcessor(mapper);
 		forEachRow(processor);
+		Table result = null;
 		Map<Object, List<Integer>> groups = processor.getGroups();
-		Table table = new Table(name + ".groupBy");
-		List<AbstractColumn> columns = reducer.getColumns();
-		for (AbstractColumn column : columns) {
-			table.getColumns().append(column);
-		}
 		for (Object key : groups.keySet()) {
 			List<Integer> indices = groups.get(key);
-			List<Row> rows = new Vector<Row>();
+			Table groupedTable = this.cloneStructure(name + ":" + key);
 			for (Integer index : indices) {
-				rows.add(getRows().get(index));
+				groupedTable.getRows().append(getRows().get(index));
 			}
-			Row newRow = reducer.reduce(key, rows);
-			table.getRows().append(newRow);
+			Table reducedTable = aggregator.aggregate(groupedTable);
+			if (result == null) {
+				result = reducedTable;
+			} else {
+				result.append(reducedTable);
+			}
 		}
-		return table;
+		return result;
+	}
+
+	public void append(Table table) throws IOException {
+		table.forEachRow(new RowCopyProcessor(this));
 	}
 
 	public int getMissings() {
@@ -163,6 +183,14 @@ public class Table {
 
 	}
 
+	public Table cloneStructure(String name) throws IOException {
+		Table table = new Table(getName() + ":" + name);
+		for (AbstractColumn column : storage) {
+			table.getColumns().append(column.cloneStructure());
+		}
+		return table;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -195,7 +223,10 @@ public class Table {
 
 	}
 
-	public void printSummary() {
+	public void printSummary() throws IOException {
+
+		System.out.println(name + " [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
+
 		for (AbstractColumn column : storage) {
 			column.printSummary();
 			System.out.println();

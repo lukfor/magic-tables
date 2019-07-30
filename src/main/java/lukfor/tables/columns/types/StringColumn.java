@@ -34,12 +34,23 @@ public class StringColumn extends AbstractColumn {
 
 	@Override
 	public int compare(Object value1, Object value2) {
+		if (value1 == null) {
+			value1 = "";
+		}
+		if (value2 == null) {
+			value2 = "";
+		}
 		return value1.toString().compareTo(value2.toString());
 	}
 
 	@Override
 	public boolean accepts(Object data) {
 		return data instanceof String;
+	}
+	
+	@Override
+	public AbstractColumn cloneStructure() {
+		return new StringColumn(getName());
 	}
 
 }

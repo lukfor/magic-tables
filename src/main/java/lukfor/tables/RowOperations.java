@@ -8,10 +8,10 @@ import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.ColumnSorter;
 import lukfor.tables.rows.IRowProcessor;
 import lukfor.tables.rows.Row;
-import lukfor.tables.rows.RowDuplicateProcessor;
-import lukfor.tables.rows.RowSelectionProcessor;
 import lukfor.tables.rows.filters.IRowFilter;
 import lukfor.tables.rows.filters.RowValueRegExFilter;
+import lukfor.tables.rows.processors.RowDuplicateProcessor;
+import lukfor.tables.rows.processors.RowSelectionProcessor;
 
 public class RowOperations {
 
@@ -30,7 +30,6 @@ public class RowOperations {
 		return row;
 	}
 
-
 	public List<Row> getAll(final String column, final Object value) throws IOException {
 
 		return getAll(new IRowFilter() {
@@ -41,7 +40,7 @@ public class RowOperations {
 		});
 
 	}
-	
+
 	public List<Row> getAllByRegEx(final String column, final String value) throws IOException {
 
 		return getAll(new IRowFilter() {
@@ -52,7 +51,6 @@ public class RowOperations {
 		});
 
 	}
-
 
 	public List<Row> getAll(final IRowFilter filter) throws IOException {
 		final List<Row> results = new Vector<Row>();
@@ -65,8 +63,19 @@ public class RowOperations {
 		});
 		return results;
 	}
-	
-	
+
+	public void append(Object... values) throws IOException {
+
+		if (values.length != table.getColumns().getSize()) {
+			throw new IOException("Length of array 'values' is different the number of columns");
+		}
+
+		for (int i = 0; i < values.length; i++) {
+			AbstractColumn column = table.getColumn(i);
+			column.add(values[i]);
+		}
+	}
+
 	public void append(Row row) throws IOException {
 		for (AbstractColumn column : table.storage) {
 			Object object = row.getObject(column.getName());
@@ -139,9 +148,9 @@ public class RowOperations {
 		table.forEachRow(processor);
 		drop(processor.getBitmask());
 	}
-	
+
 	public void dropMissings() throws IOException {
-		IRowFilter filter = new IRowFilter() {			
+		IRowFilter filter = new IRowFilter() {
 			@Override
 			public boolean accepts(Row row) throws IOException {
 				return row.hasMissings();
@@ -151,9 +160,9 @@ public class RowOperations {
 		table.forEachRow(processor);
 		drop(processor.getBitmask());
 	}
-	
+
 	public void dropMissings(String column) throws IOException {
-		IRowFilter filter = new IRowFilter() {			
+		IRowFilter filter = new IRowFilter() {
 			@Override
 			public boolean accepts(Row row) throws IOException {
 				return (row.getObject(column) == null);
@@ -163,7 +172,7 @@ public class RowOperations {
 		table.forEachRow(processor);
 		drop(processor.getBitmask());
 	}
-	
+
 	public void selectByRegEx(String column, String regExp) throws IOException {
 		select(new RowValueRegExFilter(column, regExp));
 	}
@@ -191,7 +200,7 @@ public class RowOperations {
 		System.out.println("  #Rows after filtering: " + rowsAfter);
 
 	}
-	
+
 	public int getSize() throws IOException {
 		table.assertsNotEmpty();
 		return table.storage.get(0).getSize();
