@@ -26,6 +26,26 @@ public abstract class AbstractColumn {
 			}
 		}
 	}
+	
+	public void replaceDataFrom(AbstractColumn column) {
+		for (int i = 0; i < column.getSize(); i++) {
+			Object object = column.get(i);
+			if (object != null) {
+				storage.set(i,valueToObject(object.toString()));
+			} else {
+				storage.set(i, null);
+			}
+		}
+	}
+	
+	public List<Number> getValues(){
+		List<Number> numbers = new Vector<Number>();
+		for (int i = 0; i < getSize(); i++) {
+			Object object = get(i);
+			numbers.add((Number) object);
+		}
+		return numbers;
+	}
 
 	public void setName(String name) {
 		this.name = name;

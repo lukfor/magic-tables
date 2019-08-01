@@ -5,7 +5,7 @@
 
 	<groupId>lukfor</groupId>
 	<artifactId>tables</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>lukfor-tables</name>
@@ -48,6 +48,17 @@
 			<artifactId>genepi-io</artifactId>
 			<version>1.0.10</version>
 		</dependency>
+				<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.4.13</version>
+		</dependency>
+<dependency>
+    <groupId>org.knowm.xchart</groupId>
+    <artifactId>xchart</artifactId>
+    <version>3.5.4</version>
+</dependency>
+		
 		<dependency>
 			<groupId>com.jakewharton.fliptables</groupId>
 			<artifactId>fliptables</artifactId>

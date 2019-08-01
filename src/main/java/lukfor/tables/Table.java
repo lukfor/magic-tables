@@ -13,6 +13,7 @@ import lukfor.tables.rows.IRowAggregator;
 import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.IRowProcessor;
 import lukfor.tables.rows.Row;
+import lukfor.tables.rows.mappers.BinRowMapper;
 import lukfor.tables.rows.processors.RowCopyProcessor;
 import lukfor.tables.rows.processors.RowGroupProcessor;
 import lukfor.tables.utils.GroupByBuilder;
@@ -90,6 +91,10 @@ public class Table {
 
 	}
 
+	public Table binBy(final String column, double binSize, IRowAggregator aggregator) throws IOException {
+		return groupBy(new BinRowMapper("MAF", binSize), aggregator);
+	}
+
 	public Table groupBy(IRowMapper mapper, IRowAggregator aggregator) throws IOException {
 		RowGroupProcessor processor = new RowGroupProcessor(mapper);
 		forEachRow(processor);
@@ -101,7 +106,7 @@ public class Table {
 			for (Integer index : indices) {
 				groupedTable.getRows().append(getRows().get(index));
 			}
-			Table reducedTable = aggregator.aggregate(groupedTable);
+			Table reducedTable = aggregator.aggregate(key, groupedTable);
 			if (result == null) {
 				result = reducedTable;
 			} else {
@@ -221,15 +226,18 @@ public class Table {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
 
 	@Override
 	public String toString() {
-
-		return super.toString();
+		try {
+			return getAsString(0, 25);
+		} catch (Exception e) {
+			return "ERROR";
+		}
 	}
 
 	protected void assertsColumnExists(String column) throws IOException {
@@ -262,6 +270,10 @@ public class Table {
 	}
 
 	public void printBetween(int start, int end) throws IOException {
+		System.out.println(getAsString(start, end));
+	}
+
+	public String getAsString(int start, int end) throws IOException {
 
 		int height = getRows().getSize() - 1;
 		start = Math.max(start, 0);
@@ -275,12 +287,12 @@ public class Table {
 		}
 
 		String[][] data = getRows().data(start, end);
-		System.out.println();
-		System.out.println(name + ":");
-		System.out.print(FlipTable.of(header, data));
-		System.out.println("Showing " + (start + 1) + " to " + (end + 1) + " of " + getRows().getSize() + " entries, "
-				+ getColumns().getSize() + " total columns");
-		System.out.println();
+		String result = "";
+		result += "\n" + name + ":\n";
+		result += FlipTable.of(header, data);
+		result += "Showing " + (start + 1) + " to " + (end + 1) + " of " + getRows().getSize() + " entries, "
+				+ getColumns().getSize() + " total columns\n\n";
+		return result;
 	}
 
 	public void print() throws IOException {
@@ -291,10 +303,7 @@ public class Table {
 		printFirst(getRows().getSize());
 	}
 
-	public void printSummary() throws IOException {
-
-		System.out.println(name + " [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
-
+	public Table getSummary() throws IOException {
 		Table table = new Table(name + ":summary");
 		table.getColumns().append(new StringColumn("column"));
 		table.getColumns().append(new StringColumn("type"));
@@ -314,6 +323,14 @@ public class Table {
 			row.setString("n", (column.getSize() - column.getMissings()));
 			table.getRows().append(row);
 		}
+		return table;
+	}
+
+	public void printSummary() throws IOException {
+
+		System.out.println(name + " [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
+
+		Table table = getSummary();
 		table.printAll();
 	}
 

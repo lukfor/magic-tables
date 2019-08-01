@@ -19,7 +19,7 @@ public class MeanRowAggregator implements IRowAggregator {
 	}
 
 	@Override
-	public Table aggregate(Table group) throws IOException {
+	public Table aggregate(Object key2, Table group) throws IOException {
 
 		Table table = new Table(group.getName() + ":reduced");
 		AbstractColumn newKeyColumn = group.getColumn(keyColumn).cloneStructure();

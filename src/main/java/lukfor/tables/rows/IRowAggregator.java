@@ -6,6 +6,6 @@ import lukfor.tables.Table;
 
 public interface IRowAggregator {
 
-	public Table aggregate(Table group) throws IOException;
+	public Table aggregate(Object key, Table group) throws IOException;
 
 }
