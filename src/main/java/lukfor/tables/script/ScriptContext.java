@@ -3,18 +3,21 @@ package lukfor.tables.script;
 import java.util.HashMap;
 
 public class ScriptContext {
+	
+	public static String baseDir = ".";
 
-	public static HashMap<String, String> params = new HashMap<String, String>() {
+	public static HashMap<String, Object> params = new HashMap<String, Object>() {
 
 		private static final long serialVersionUID = 1L;
 
-		public String put(String key, String value) {
+		public Object put(String key, Object value) {
 			if (get(key) == null) {
-				return super.put(key, value);
+				return super.put(key, value.toString());
 			} else {
 				return null;
 			}
 		};
+		
 	};
 
 }

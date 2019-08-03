@@ -1,7 +1,24 @@
 # lukfor-tables
 
 
-Simple java API to read, transform, sort, filter and aggregate tables.
+Simple DSL and java API to read, transform, sort, filter and aggregate tables.
+
+
+## Getting started
+
+
+Run a tables script on the command line:
+
+```
+tables examples/hello-tables.tables
+```
+
+Combine markdown with tables and produce a html report:
+
+```
+tables examples/hello-tables.tables.md
+```
+
 
 ## Reading data
 

@@ -39,6 +39,77 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<!-- Build jar -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>lukfor.tables.App</mainClass>
+						</manifest>
+						<manifestEntries>
+							<Version>${project.version}</Version>
+							<Build-Time>${maven.build.timestamp}</Build-Time>
+						</manifestEntries>
+					</archive>
+				</configuration>
+
+			</plugin>
+
+			<!-- Build final directory structure and zip files -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>create-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Build installer -->
+
+			<plugin>
+				<groupId>com.github.hazendaz.maven</groupId>
+				<artifactId>makeself-maven-plugin</artifactId>
+				<version>1.0.0.beta3</version>
+				<configuration>
+					<archiveDir>tables-${project.version}-assembly</archiveDir>
+					<fileName>tables-installer.sh</fileName>
+					<label>Install Tables ${project.version}</label>
+					<notemp>true</notemp>
+					<current>true</current>
+					<nox11>true</nox11>
+					<nowait>true</nowait>
+				</configuration>
+				<executions>
+					<execution>
+						<id>makeself</id>
+						<goals>
+							<goal>makeself</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
 		</plugins>
 	</build>
 
@@ -48,17 +119,23 @@
 			<artifactId>genepi-io</artifactId>
 			<version>1.0.10</version>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 			<version>2.4.13</version>
 		</dependency>
-<dependency>
-    <groupId>org.knowm.xchart</groupId>
-    <artifactId>xchart</artifactId>
-    <version>3.5.4</version>
-</dependency>
-		
+		<dependency>
+			<groupId>org.knowm.xchart</groupId>
+			<artifactId>xchart</artifactId>
+			<version>3.5.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.commonmark</groupId>
+			<artifactId>commonmark</artifactId>
+			<version>0.13.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.jakewharton.fliptables</groupId>
 			<artifactId>fliptables</artifactId>

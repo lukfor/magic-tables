@@ -43,8 +43,5 @@ public class Plotting {
 
 	}
 
-	public static double findBin(Double value) {
-		return Math.floor(value / BIN_SIZE) * BIN_SIZE;
-	}
 
 }

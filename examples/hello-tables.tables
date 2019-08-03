@@ -1,5 +1,4 @@
-
-params.input = "data/dummy.csv"
+params.input = "$baseDir/example.csv"
 
 table = fromCsvFile(params.input).load();
 

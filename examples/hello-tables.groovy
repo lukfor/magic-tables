@@ -7,7 +7,7 @@ import lukfor.tables.rows.*
 import lukfor.tables.columns.*
 import lukfor.tables.columns.types.*
 
-Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
+Table table = TableBuilder.fromCsvFile("example.csv").load();
 
 table.getColumns().append(new IntegerColumn("id_2"), new IBuildValueFunction() {
   public Integer buildValue(Row row) throws IOException {
