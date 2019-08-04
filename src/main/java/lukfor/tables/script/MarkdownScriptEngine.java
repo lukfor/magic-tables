@@ -23,7 +23,7 @@ import groovy.text.Template;
 
 public class MarkdownScriptEngine {
 
-	public static final String DEFAULT_TEMPLATE = "templates/default.html";
+	public static final String DEFAULT_TEMPLATE = "templates/github.html";
 
 	private ScriptEngine engine;
 
