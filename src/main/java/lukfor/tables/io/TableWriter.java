@@ -26,10 +26,7 @@ public class TableWriter {
 	}
 
 	public static void writeToCsv(Table table, String filename, char outputSeparator) throws IOException {
-
-		System.out.println("Writing file " + filename + "...");
 		writeToCsv(table, filename, outputSeparator, false);
-
 	}
 	
 	public static void writeToCsv(Table table, String filename, char outputSeparator, boolean quote) throws IOException {
