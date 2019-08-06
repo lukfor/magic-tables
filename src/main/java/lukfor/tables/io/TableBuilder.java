@@ -1,6 +1,11 @@
 package lukfor.tables.io;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import genepi.io.FileUtil;
 import genepi.io.table.reader.CsvTableReader;
@@ -86,6 +91,35 @@ public class TableBuilder {
 					table.getColumns().setType(column, type);
 				}
 			}
+		}
+
+		System.out.println("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
+				+ table.getColumns().getSize() + "] into memory.");
+
+		return table;
+	}
+
+	public static Table fromDatabase(Connection connection, String sql) throws SQLException, IOException {
+
+		Table table = new Table(sql);
+
+		Statement statement = connection.createStatement();
+		ResultSet result = statement.executeQuery(sql);
+		ResultSetMetaData meta = result.getMetaData();
+
+		for (int i = 0; i < meta.getColumnCount(); i++) {
+			String column = meta.getColumnName(i + 1);
+			table.getColumns().append(new StringColumn(column));
+		}
+
+		while (result.next()) {
+			for (int i = 0; i < meta.getColumnCount(); i++) {
+				AbstractColumn column = table.getColumns().get(i);
+				String value = result.getString(i + 1);
+				Object object = column.valueToObject(value);
+				column.add(object);
+			}
+
 		}
 
 		System.out.println("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
