@@ -16,7 +16,7 @@ public class StringColumn extends AbstractColumn {
 
 	@Override
 	public Object valueToObject(String data) {
-		if (data.isEmpty()) {
+		if (data == null || data.isEmpty()) {
 			return null;
 		} else {
 			return data;
