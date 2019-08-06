@@ -115,6 +115,22 @@ public class Table {
 		}
 		return result;
 	}
+	
+	public List<Table> splitBy(IRowMapper mapper) throws IOException {
+		RowGroupProcessor processor = new RowGroupProcessor(mapper);
+		forEachRow(processor);
+		List<Table> result = new Vector<>();
+		Map<Object, List<Integer>> groups = processor.getGroups();
+		for (Object key : groups.keySet()) {
+			List<Integer> indices = groups.get(key);
+			Table groupedTable = this.cloneStructure(name + ":" + key);
+			for (Integer index : indices) {
+				groupedTable.getRows().append(getRows().get(index));
+			}
+			result.add(groupedTable);			
+		}
+		return result;
+	}
 
 	public void append(Table table) throws IOException {
 		table.forEachRow(new RowCopyProcessor(this));
