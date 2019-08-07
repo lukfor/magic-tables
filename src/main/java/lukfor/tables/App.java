@@ -34,22 +34,22 @@ public class App {
 		File script = new File(filename);
 		if (!script.exists()) {
 			System.out.println("File '" + filename + "' not found.");
-			return -1;	
+			return -1;
 		}
 		String baseDir = ".";
 		if (script.getParentFile() != null) {
 			baseDir = script.getParentFile().getAbsolutePath();
 		}
-		
-		if (filename.endsWith(".tables")) {
+
+		if (filename.endsWith(".mtbl")) {
 			ScriptEngine engine = new ScriptEngine(baseDir, params);
 			engine.run(script);
-		} else if (filename.endsWith(".tables.md")) {
+		} else if (filename.endsWith(".mtbl.md")) {
 			MarkdownScriptEngine engine = new MarkdownScriptEngine(baseDir, params);
-			String output = filename.replaceAll(".tables.md", ".html");
+			String output = filename.replaceAll(".mtbl.md", ".html");
 			engine.run(script, new File(output));
 		} else {
-			System.out.println("Please specify a tb or tb.md file.");
+			System.out.println("Please specify a mtbl or mtbl.md file.");
 			return -1;
 		}
 

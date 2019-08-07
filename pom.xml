@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>lukfor</groupId>
-	<artifactId>tables</artifactId>
+	<artifactId>magic-tables</artifactId>
 	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
-	<name>lukfor-tables</name>
+	<name>magic tables</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -17,7 +17,7 @@
 
 	<repositories>
 		<repository>
-			<id>genepi-hadoop</id>
+			<id>genepi</id>
 			<url>https://raw.github.com/genepi/maven-repository/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
@@ -91,9 +91,9 @@
 				<artifactId>makeself-maven-plugin</artifactId>
 				<version>1.0.0.beta3</version>
 				<configuration>
-					<archiveDir>tables-${project.version}-assembly</archiveDir>
-					<fileName>tables-installer.sh</fileName>
-					<label>Install Tables ${project.version}</label>
+					<archiveDir>magic-tables-${project.version}-assembly</archiveDir>
+					<fileName>magic-tables-installer.sh</fileName>
+					<label>Install magic tables ${project.version}</label>
 					<notemp>true</notemp>
 					<current>true</current>
 					<nox11>true</nox11>

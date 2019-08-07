@@ -1,4 +1,5 @@
-# lukfor-tables
+# Magic Tables :tophat::rabbit::chart_with_upwards_trend:
+
 
 
 Simple DSL and java API to read, transform, sort, filter and aggregate tables.
@@ -7,16 +8,16 @@ Simple DSL and java API to read, transform, sort, filter and aggregate tables.
 ## Getting started
 
 
-Run a tables script on the command line:
+Run a magic-tables script on the command line:
 
 ```
-tables examples/hello-tables.tables
+magic-tables examples/hello-tables.mtbl
 ```
 
-Combine markdown with tables and produce a html report:
+Combine markdown with magic-tables and produce a html report:
 
 ```
-tables examples/hello-tables.tables.md
+magic-tables examples/hello-tables.mtbl.md
 ```
 
 
@@ -179,7 +180,7 @@ sdk install groovy
 
 ```groovy
 @GrabResolver(name='genepi', root='https://raw.github.com/genepi/maven-repository/mvn-repo/')
-@Grab('lukfor:tables:0.0.1')
+@Grab('lukfor:magic-tables:0.0.2')
 
 import lukfor.tables.*
 import lukfor.tables.io.*

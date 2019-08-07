@@ -6,7 +6,7 @@ FILE_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # The fully qualified name of the class to execute
 CLASS="lukfor.tables.App"
 
-CLASS_PATH="$FILE_PATH/tables.jar"
+CLASS_PATH="$FILE_PATH/magic-tables.jar"
 
 
 # execute cloudgene
