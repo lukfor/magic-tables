@@ -6,6 +6,12 @@ import lukfor.tables.columns.ColumnType;
 public class StringColumn extends AbstractColumn {
 
 	public StringColumn(String name) {
+		super(100);
+		setName(name);
+	}
+
+	public StringColumn(String name, int capacity) {
+		super(capacity);
 		setName(name);
 	}
 
@@ -47,12 +53,12 @@ public class StringColumn extends AbstractColumn {
 	public boolean accepts(Object data) {
 		return data instanceof String;
 	}
-	
+
 	@Override
-	public boolean isMissingValue(Object object) {		
+	public boolean isMissingValue(Object object) {
 		return object == null || object.toString().isEmpty();
 	}
-	
+
 	@Override
 	public AbstractColumn cloneStructure() {
 		return new StringColumn(getName());

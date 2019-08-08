@@ -18,9 +18,15 @@ public class DoubleColumn extends AbstractColumn {
 	}
 	
 	public DoubleColumn(String name) {
+		super(100);
 		setName(name);
 	}
-
+	
+	public DoubleColumn(String name, int capacity) {
+		super(capacity);
+		setName(name);
+	}
+	
 	@Override
 	public ColumnType getType() {
 		return ColumnType.DOUBLE;

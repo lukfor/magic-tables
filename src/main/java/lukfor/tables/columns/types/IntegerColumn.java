@@ -6,9 +6,15 @@ import lukfor.tables.columns.ColumnType;
 public class IntegerColumn extends AbstractColumn {
 
 	public IntegerColumn(String name) {
+		super(100);
 		setName(name);
 	}
 
+	public IntegerColumn(String name, int capacity) {
+		super(capacity);
+		setName(name);
+	}
+	
 	@Override
 	public ColumnType getType() {
 		return ColumnType.INTEGER;

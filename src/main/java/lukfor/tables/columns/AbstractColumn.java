@@ -12,10 +12,14 @@ import java.util.Vector;
 
 public abstract class AbstractColumn {
 
-	protected List<Object> storage = new Vector<Object>();
+	protected List<Object> storage;
 
 	private String name;
 
+	public AbstractColumn(int initSize) {
+		storage = new Vector<Object>(initSize);
+	}
+	
 	public void copyDataFrom(AbstractColumn column) {
 		for (int i = 0; i < column.getSize(); i++) {
 			Object object = column.get(i);
