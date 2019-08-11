@@ -25,7 +25,12 @@ public class IntegerColumn extends AbstractColumn {
 		if (data.equals(".") || data.equals("") || data.equals("NaN") || data.equals("*")) {
 			return null;
 		} else {
+			try {
 			return Integer.parseInt(data);
+			}catch (Exception e) {
+				System.out.println("Column " + getName() + ": Error parsing '" + data + "' to integer.");
+				return null;
+			}
 		}
 	}
 
