@@ -9,24 +9,24 @@ import lukfor.tables.columns.ColumnType;
 public class DoubleColumn extends AbstractColumn {
 
 	public static NumberFormat FORMAT;
-	
+
 	static {
 		FORMAT = NumberFormat.getInstance(new Locale("en", "US"));
 		FORMAT.setGroupingUsed(false);
 		FORMAT.setMinimumFractionDigits(3);
 		FORMAT.setMaximumFractionDigits(3);
 	}
-	
+
 	public DoubleColumn(String name) {
 		super(100);
 		setName(name);
 	}
-	
+
 	public DoubleColumn(String name, int capacity) {
 		super(capacity);
 		setName(name);
 	}
-	
+
 	@Override
 	public ColumnType getType() {
 		return ColumnType.DOUBLE;
@@ -37,7 +37,12 @@ public class DoubleColumn extends AbstractColumn {
 		if (data.equals(".") || data.equals("") || data.equals("NaN") || data.equals("*")) {
 			return null;
 		} else {
-			return Double.parseDouble(data);
+			try {
+				return Double.parseDouble(data);
+			} catch (Exception e) {
+				System.out.println("Column " + getName() + ": Error parsing '" + data + "' to double.");
+				return null;
+			}
 		}
 	}
 
@@ -117,7 +122,7 @@ public class DoubleColumn extends AbstractColumn {
 		}
 		return max;
 	}
-	
+
 	@Override
 	public AbstractColumn cloneStructure() {
 		return new DoubleColumn(getName());
@@ -127,5 +132,5 @@ public class DoubleColumn extends AbstractColumn {
 	public boolean isMissingValue(Object object) {
 		return object == null || object.toString().isEmpty();
 	}
-	
+
 }

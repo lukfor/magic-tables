@@ -14,7 +14,7 @@ public class IntegerColumn extends AbstractColumn {
 		super(capacity);
 		setName(name);
 	}
-	
+
 	@Override
 	public ColumnType getType() {
 		return ColumnType.INTEGER;
@@ -26,8 +26,8 @@ public class IntegerColumn extends AbstractColumn {
 			return null;
 		} else {
 			try {
-			return Integer.parseInt(data);
-			}catch (Exception e) {
+				return Integer.parseInt(data);
+			} catch (Exception e) {
 				System.out.println("Column " + getName() + ": Error parsing '" + data + "' to integer.");
 				return null;
 			}
@@ -112,11 +112,12 @@ public class IntegerColumn extends AbstractColumn {
 		}
 		return max;
 	}
+
 	@Override
 	public AbstractColumn cloneStructure() {
 		return new IntegerColumn(getName());
 	}
-	
+
 	@Override
 	public boolean isMissingValue(Object object) {
 		return object == null || object.toString().isEmpty();
