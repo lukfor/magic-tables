@@ -1,6 +1,9 @@
 package lukfor.tables.io;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -27,7 +30,11 @@ public class TableBuilder {
 
 	public static Table fromCsvFile(CsvTableOptions options) throws IOException {
 		System.out.println("Reading Csv file " + options.getFilename() + "...");
-		ITableReader reader = new CsvTableReader(options.getFilename(), options.getSeparator());
+				
+		FileInputStream inputStream = new FileInputStream(options.getFilename());
+		InputStream in2 = FileUtil.decompressStream(inputStream);
+		
+		ITableReader reader = new CsvTableReader(new DataInputStream(in2), options.getSeparator());
 
 		String name = FileUtil.getFilename(options.getFilename());
 		return fromTableReader(name, reader, options.isColumnTypeDetection());
@@ -83,14 +90,7 @@ public class TableBuilder {
 
 		// try to find the right type
 		if (columnTypeDetection) {
-			for (int i = 0; i < table.getColumns().getSize(); i++) {
-				AbstractColumn column = table.getColumns().get(i);
-				ColumnType type = ColumnTypeDetector.guessType(column);
-				if (type != column.getType()) {
-					System.out.println("Update type of " + column.getName() + " to " + type + "...");
-					table.getColumns().setType(column, type);
-				}
-			}
+			table.detectTypes();
 		}
 
 		System.out.println("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "

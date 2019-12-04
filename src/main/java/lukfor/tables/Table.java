@@ -8,11 +8,14 @@ import java.util.Vector;
 import com.jakewharton.fliptables.FlipTable;
 
 import lukfor.tables.columns.AbstractColumn;
+import lukfor.tables.columns.ColumnType;
+import lukfor.tables.columns.ColumnTypeDetector;
 import lukfor.tables.columns.types.StringColumn;
 import lukfor.tables.rows.IRowAggregator;
 import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.IRowProcessor;
 import lukfor.tables.rows.Row;
+import lukfor.tables.rows.TableIndex;
 import lukfor.tables.rows.mappers.BinRowMapper;
 import lukfor.tables.rows.processors.RowCopyProcessor;
 import lukfor.tables.rows.processors.RowGroupProcessor;
@@ -115,7 +118,7 @@ public class Table {
 		}
 		return result;
 	}
-	
+
 	public List<Table> splitBy(IRowMapper mapper) throws IOException {
 		RowGroupProcessor processor = new RowGroupProcessor(mapper);
 		forEachRow(processor);
@@ -127,7 +130,7 @@ public class Table {
 			for (Integer index : indices) {
 				groupedTable.getRows().append(getRows().get(index));
 			}
-			result.add(groupedTable);			
+			result.add(groupedTable);
 		}
 		return result;
 	}
@@ -247,6 +250,14 @@ public class Table {
 		return name;
 	}
 
+	public TableIndex createIndex(String column) throws IOException {
+
+		assertsColumnExists(column);
+		TableIndex index = new TableIndex(this);
+		index.build(getColumn(column));
+		return index;
+	}
+
 	@Override
 	public String toString() {
 		try {
@@ -348,6 +359,20 @@ public class Table {
 
 		Table table = getSummary();
 		table.printAll();
+	}
+
+	public void detectTypes() throws IOException {
+
+		// try to find the right type
+		for (int i = 0; i < getColumns().getSize(); i++) {
+			AbstractColumn column = getColumns().get(i);
+			ColumnType type = ColumnTypeDetector.guessType(column);
+			if (type != column.getType()) {
+				System.out.println("Update type of " + column.getName() + " to " + type + "...");
+				getColumns().setType(column, type);
+			}
+		}
+
 	}
 
 }

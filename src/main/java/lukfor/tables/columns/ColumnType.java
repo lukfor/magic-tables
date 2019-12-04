@@ -2,6 +2,6 @@ package lukfor.tables.columns;
 
 public enum ColumnType {
 
-	INTEGER, DOUBLE, STRING
+	INTEGER, DOUBLE, STRING, DATE
 
 }

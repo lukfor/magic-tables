@@ -2,6 +2,8 @@ package lukfor.tables.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import genepi.io.table.writer.CsvTableWriter;
 import genepi.io.table.writer.ExcelTableWriter;
@@ -89,7 +91,7 @@ public class TableWriter {
 	}
 
 	public static void writeToSasCsv(final Table table, String filename) throws IOException {
-
+		
 		String separator = ",";
 		String quote = "\"";
 		String missingNumber = ".";
@@ -121,6 +123,8 @@ public class TableWriter {
 								line.append(object.toString());
 							} else if (object instanceof Double) {
 								line.append(object.toString());
+							} else if (object instanceof Date) {
+								line.append(column.objectToValue(object));
 							} else {
 								String value = column.objectToValue(object);
 								line.append(quote);
