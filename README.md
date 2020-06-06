@@ -7,6 +7,29 @@ Simple DSL and java API to read, transform, sort, filter and aggregate tables.
 
 ## Getting started
 
+### Dependency
+
+Add the following repository to your pom.xml or gradle file:
+
+```
+<repository>
+  <id>bintray-lukfor-maven</id>
+  <name>bintray</name>
+  <url>https://dl.bintray.com/lukfor/maven</url>
+</repository>
+```
+
+Add the following dependecy:
+
+```
+<dependency>
+  <groupId>lukfor</groupId>
+  <artifactId>magic-tables</artifactId>
+  <version>0.2.0</version>
+</dependency>
+```
+
+### Scripts (Experimental)
 
 Run a magic-tables script on the command line:
 
