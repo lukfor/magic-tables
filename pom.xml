@@ -14,7 +14,7 @@
 
 	<distributionManagement>
 		<repository>
-			<id>lukfor-maven</id>
+			<id>bintray-lukfor-maven</id>
 			<name>lukfor-maven</name>
 			<url>https://api.bintray.com/maven/lukfor/maven/magic-tables/;publish=1</url>
 		</repository>
