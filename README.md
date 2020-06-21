@@ -1,8 +1,9 @@
 # Magic Tables :tophat::rabbit::chart_with_upwards_trend:
 
+![build](https://github.com/lukfor/magic-tables/workflows/build/badge.svg)
+[ ![Download](https://api.bintray.com/packages/lukfor/maven/magic-tables/images/download.svg) ](https://bintray.com/lukfor/maven/magic-tables/_latestVersion)
 
-
-Simple DSL and java API to read, transform, sort, filter and aggregate tables.
+> Simple DSL and java API to read, transform, sort, filter and aggregate tables.
 
 
 ## Getting started
