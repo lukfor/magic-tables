@@ -44,7 +44,7 @@ public class ColumnOperations {
 		column.setName(newName);
 	}
 
-	public void append(AbstractColumn column) throws IOException {
+	public AbstractColumn append(AbstractColumn column) throws IOException {
 		append(column, new IBuildValueFunction() {
 			
 			@Override
@@ -52,9 +52,12 @@ public class ColumnOperations {
 				return null;
 			}
 		});
+		
+		return column;
+		
 	}
 
-	public void append(final AbstractColumn column, final IBuildValueFunction builder) throws IOException {
+	public AbstractColumn append(final AbstractColumn column, final IBuildValueFunction builder) throws IOException {
 
 		if (get(column.getName()) != null) {
 			throw new IOException("Duplicate column '" + column + ".");
@@ -77,6 +80,9 @@ public class ColumnOperations {
 			});
 
 		}
+		
+		return column;
+		
 	}
 
 	public void setType(String column, ColumnType type) throws IOException {
