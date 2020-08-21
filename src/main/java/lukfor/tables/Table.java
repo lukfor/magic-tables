@@ -192,25 +192,25 @@ public class Table {
 			}
 		}
 
+		// create index on table2 for columns columnTable2
+		TableIndex index = table2.createIndex(columnTable2);
+
 		forEachRow(new IRowProcessor() {
 
 			public void process(Row row) throws IOException {
 
 				Object value = row.getObject(columnTable1);
-				List<Row> rowsTable2 = table2.getRows().getAll(columnTable2, value);
-				if (rowsTable2.size() == 1) {
-					for (Row rowTable2 : rowsTable2) {
-						for (String columnTable2 : columnsTable2) {
-							Object valueTable2 = rowTable2.getObject(columnTable2);
-							getColumn(columnTable2).set(row.getIndex(), valueTable2);
-						}
+				Row rowTable2 = index.getRow(value);
+				if (rowTable2 != null) {
+					for (String columnTable2 : columnsTable2) {
+						Object valueTable2 = rowTable2.getObject(columnTable2);
+						getColumn(columnTable2).set(row.getIndex(), valueTable2);
 					}
-				} else if (rowsTable2.size() == 0) {
+
+				} else {
 					for (String columnTable2 : columnsTable2) {
 						getColumn(columnTable2).set(row.getIndex(), null);
 					}
-				} else {
-					throw new IOException("simple merge not possible. No one to one mapping found.");
 				}
 			}
 		});
