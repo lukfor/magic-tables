@@ -124,11 +124,6 @@
 
 	<dependencies>
 
-		<dependency>
-			<groupId>net.sf.ucanaccess</groupId>
-			<artifactId>ucanaccess</artifactId>
-			<version>4.0.4</version>
-		</dependency>
 
 		<dependency>
 			<groupId>genepi</groupId>
@@ -139,11 +134,6 @@
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 			<version>2.4.13</version>
-		</dependency>
-		<dependency>
-			<groupId>org.knowm.xchart</groupId>
-			<artifactId>xchart</artifactId>
-			<version>3.5.4</version>
 		</dependency>
 
 		<dependency>
