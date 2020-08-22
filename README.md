@@ -58,6 +58,16 @@ In addition you can disable `columnTypeDetection` and load all columns as string
 Table table = TableBuilder.fromXlsFile("data/dummy.xls").withColumnTypeDetection(false).load();
 ```
 
+### Writing data
+
+```java
+TableWriter.writeToCsv(table, "id.csv");
+```
+
+```java
+TableWriter.writeToXls(table, "id.csv");
+```
+
 ### Inspecting data
 
 ```java
@@ -157,8 +167,6 @@ table1.merge(table2, column1, column2); //left join on table1.column1 = table2.c
 Work in progress:
 
 ```java
-table.append(table2)
-
 table.melt(..)
 table.merge(table, column,  LEFT | RIGHT | OUTER | INNER
 ```
@@ -174,15 +182,6 @@ table.groupBy("column_name").mean("value_name")
 table.groupBy(mapper(), aggregator())
 ```
 
-### Writing data
-
-```java
-TableWriter.writeToCsv(table, "id.csv");
-```
-
-```java
-TableWriter.writeToXls(table, "id.csv");
-```
 
 ## License
 
