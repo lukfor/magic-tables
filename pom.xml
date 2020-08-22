@@ -130,17 +130,7 @@
 			<artifactId>genepi-io</artifactId>
 			<version>1.0.10</version>
 		</dependency>
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<version>2.4.13</version>
-		</dependency>
 
-		<dependency>
-			<groupId>com.atlassian.commonmark</groupId>
-			<artifactId>commonmark</artifactId>
-			<version>0.13.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.jakewharton.fliptables</groupId>

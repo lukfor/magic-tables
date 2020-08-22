@@ -3,12 +3,10 @@
 ![build](https://github.com/lukfor/magic-tables/workflows/build/badge.svg)
 [ ![Download](https://api.bintray.com/packages/lukfor/maven/magic-tables/images/download.svg) ](https://bintray.com/lukfor/maven/magic-tables/_latestVersion)
 
-> Simple DSL and java API to read, transform, sort, filter and aggregate tables.
+> Simple java API to read, transform, sort, filter and aggregate tables.
 
 
-## Getting started
-
-### Dependency
+## Setup
 
 Add the following repository to your pom.xml or gradle file:
 
@@ -20,32 +18,20 @@ Add the following repository to your pom.xml or gradle file:
 </repository>
 ```
 
-Add the following dependecy:
+Add the following dependency:
 
 ```
 <dependency>
-  <groupId>lukfor</groupId>
+  <groupId>com.github.lukfor</groupId>
   <artifactId>magic-tables</artifactId>
   <version>0.2.1</version>
 </dependency>
 ```
 
-### Scripts (Experimental)
-
-Run a magic-tables script on the command line:
-
-```
-magic-tables examples/hello-tables.mtbl
-```
-
-Combine markdown with magic-tables and produce a html report:
-
-```
-magic-tables examples/hello-tables.mtbl.md
-```
+## Usage
 
 
-## Reading data
+### Reading data
 
 ```java
 Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
@@ -72,7 +58,7 @@ In addition you can disable `columnTypeDetection` and load all columns as string
 Table table = TableBuilder.fromXlsFile("data/dummy.xls").withColumnTypeDetection(false).load();
 ```
 
-## Inspecting data
+### Inspecting data
 
 ```java
 Object o = table.get(rowIndex, "column_name")
@@ -88,7 +74,7 @@ table.getRow(rowIndex).getString("column_name");
 ```
 
 ```java
-table.print() (prints first 25 rows)
+table.print() //(prints first 25 rows)
 table.printFirst(n)
 table.printLast(n)
 table.printAll()
@@ -110,7 +96,7 @@ table.getRows().getAllByRegEx("column_name", "value|value2")
 table.getRows().getSize()
 ```
 
-## Cleaning data
+### Cleaning data
 
 
 ```java
@@ -144,7 +130,7 @@ table.getColumn("column_name").replaceValue("old","new");
 table.getColumn("column_name").apply(function);
 ```
 
-## Transforming data
+### Transforming data
 
 ```java
 table.getColumns().append("column_name", builder())
@@ -152,25 +138,32 @@ table.getColumns().rename("column_name", "new_name")
 table.getRows().append(row)
 ```
 
-## Sorting data
+### Sorting data
 
 ```java
 table.getRows().sortAscBy("column_name");
 table.getRows().sortDescBy("column_name");
 ```
 
-## Joining and reshaping
+### Joining and reshaping
 
 ```java
 table.append(table2)
 
-table.melt(..) *todo*
-table.merge(table2, LEFT);
-table.merge( RIGHT | OUTER | INNER) *todo*
-table.pivot(..) *todo*
+table1.merge(table2, column); //left join on table1.column = table.column
+table1.merge(table2, column1, column2); //left join on table1.column1 = table2.column2
 ```
 
-## Aggregating data
+Work in progress:
+
+```java
+table.append(table2)
+
+table.melt(..)
+table.merge(table, column,  LEFT | RIGHT | OUTER | INNER
+```
+
+### Aggregating data
 
 ```java
 table.groupBy("column_name").count()
@@ -181,7 +174,7 @@ table.groupBy("column_name").mean("value_name")
 table.groupBy(mapper(), aggregator())
 ```
 
-## Writing data
+### Writing data
 
 ```java
 TableWriter.writeToCsv(table, "id.csv");
@@ -191,41 +184,7 @@ TableWriter.writeToCsv(table, "id.csv");
 TableWriter.writeToXls(table, "id.csv");
 ```
 
+## License
 
-## Groovy Support
+`magic-tables` is MIT Licensed.
 
-```sh
-$ curl -s "https://get.sdkman.io" | bash
-```
-
-```sh
-sdk install groovy
-```
-
-```groovy
-@GrabResolver(name='genepi', root='https://raw.github.com/genepi/maven-repository/mvn-repo/')
-@Grab('lukfor:magic-tables:0.0.2')
-
-import lukfor.tables.*
-import lukfor.tables.io.*
-import lukfor.tables.rows.*
-import lukfor.tables.columns.*
-import lukfor.tables.columns.types.*
-
-Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
-
-table.getColumns().append(new IntegerColumn("id_2"), new IBuildValueFunction() {
-  public Integer buildValue(Row row) throws IOException {
-    return row.getInteger("id") * 2;
-  }
-});
-
-table.printSummary();
-table.print();
-
-table.getRows().selectByRegEx("b", "r|z");
-table.print();
-
-table.getColumns().selectByRegEx("id.*");
-table.print();
-```
