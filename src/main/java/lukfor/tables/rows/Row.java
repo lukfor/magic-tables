@@ -22,8 +22,8 @@ public class Row {
 	}
 
 	public void fill(Row row) throws IOException {
-		for (int i = 0; i < row.getColumns(); i++) {
-			set(i, row.getObject(i));
+		for (String column: row.table.getColumns().getNames()) {
+			set(column, row.getObject(column));
 		}
 	}
 
@@ -87,10 +87,6 @@ public class Row {
 			}
 		}
 		return false;
-	}
-
-	public int getColumns() {
-		return table.getColumns().getSize();
 	}
 
 	public int getHashCode() {

@@ -52,6 +52,8 @@ public class TableWriter {
 
 	public static void writeToTableWriter(final Table table, final ITableWriter writer) throws IOException {
 
+		long start = System.currentTimeMillis();
+
 		writer.setColumns(table.getColumns().getNames());
 
 		table.forEachRow(new IRowProcessor() {
@@ -84,12 +86,16 @@ public class TableWriter {
 		});
 		writer.close();
 
-		Table.log(table,
-				"Wrote " + table.getRows().getSize() + " rows and " + table.getColumns().getSize() + " columns.");
+		long end = System.currentTimeMillis();
+
+		Table.log(table, "Wrote " + table.getRows().getSize() + " rows and " + table.getColumns().getSize()
+				+ " columns. Time: " + (end - start) + " ms");
 
 	}
 
 	public static void writeToSasCsv(final Table table, String filename) throws IOException {
+
+		long start = System.currentTimeMillis();
 
 		String separator = ",";
 		String quote = "\"";
@@ -155,8 +161,10 @@ public class TableWriter {
 		});
 		writer.close();
 
-		Table.log(table,
-				"Wrote " + table.getRows().getSize() + " rows and " + table.getColumns().getSize() + " columns.");
+		long end = System.currentTimeMillis();
+
+		Table.log(table, "Wrote " + table.getRows().getSize() + " rows and " + table.getColumns().getSize()
+				+ " columns. Time: " + (end - start) + " ms");
 
 	}
 
