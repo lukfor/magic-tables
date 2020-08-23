@@ -24,7 +24,7 @@ Add the following dependency:
 <dependency>
   <groupId>com.github.lukfor</groupId>
   <artifactId>magic-tables</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
