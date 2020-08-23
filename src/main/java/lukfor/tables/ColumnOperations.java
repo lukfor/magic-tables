@@ -62,6 +62,7 @@ public class ColumnOperations {
 	}
 
 	public AbstractColumn append(AbstractColumn column) throws IOException {
+
 		append(column, new IBuildValueFunction() {
 
 			@Override

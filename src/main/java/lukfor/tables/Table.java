@@ -39,13 +39,11 @@ public class Table {
 		columns = new ColumnOperations(this);
 	}
 
-	public Object get(int index, String column) throws IOException {
-		assertsColumnExists(column);
+	public Object get(int index, String column) {
 		return columns.get(column).get(index);
 	}
 
-	public Object get(int index, int column) throws IOException {
-		assertsColumnExists(column);
+	public Object get(int index, int column) {
 		return columns.get(column).get(index);
 	}
 
@@ -109,7 +107,9 @@ public class Table {
 			List<Integer> indices = groups.get(key);
 			Table groupedTable = this.cloneStructure(name + ":" + key);
 			for (Integer index : indices) {
-				groupedTable.getRows().append(getRows().get(index));
+				Row row = getRows().get(index);
+				Row newRow = groupedTable.getRows().append();
+				newRow.fill(row);
 			}
 			Table reducedTable = aggregator.aggregate(key, groupedTable);
 			if (result == null) {
@@ -130,7 +130,9 @@ public class Table {
 			List<Integer> indices = groups.get(key);
 			Table groupedTable = this.cloneStructure(name + ":" + key);
 			for (Integer index : indices) {
-				groupedTable.getRows().append(getRows().get(index));
+				Row row = getRows().get(index);
+				Row newRow = groupedTable.getRows().append();
+				newRow.fill(row);
 			}
 			result.add(groupedTable);
 		}
@@ -181,42 +183,37 @@ public class Table {
 
 		Table.log(this, "Merging with table " + table2.getName() + " on " + columnTable1 + "=" + columnTable2 + "...");
 
-		final List<String> columnsTable2 = new Vector<String>();
+		long start = System.currentTimeMillis();
 
 		// add all columns from table expect join column
 		for (int i = 0; i < table2.getColumns().getSize(); i++) {
-			AbstractColumn columTable2 = table2.getColumns().get(i);
-			if (!columTable2.getName().equals(columnTable2)) {
-				AbstractColumn newColumn = columTable2.cloneStructure();
+			AbstractColumn _columnTable2 = table2.getColumns().get(i);
+			if (!_columnTable2.getName().equals(columnTable2)) {
+				AbstractColumn newColumn = _columnTable2.cloneStructure();
 				columns.append(newColumn);
-				columnsTable2.add(columTable2.getName());
 			}
 		}
 
 		// create index on table2 for columns columnTable2
 		TableIndex index = table2.createIndex(columnTable2);
 
+		// use index to find for each row in table1 the row in table 2
 		forEachRow(new IRowProcessor() {
 
 			public void process(Row row) throws IOException {
-
 				Object value = row.getObject(columnTable1);
 				Row rowTable2 = index.getRow(value);
 				if (rowTable2 != null) {
-					for (String columnTable2 : columnsTable2) {
-						Object valueTable2 = rowTable2.getObject(columnTable2);
-						getColumn(columnTable2).set(row.getIndex(), valueTable2);
-					}
-
-				} else {
-					for (String columnTable2 : columnsTable2) {
-						getColumn(columnTable2).set(row.getIndex(), null);
-					}
+					row.fill(rowTable2);
 				}
 			}
+
 		});
 
-		Table.log(this, "Merged tables. New size [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
+		long end = System.currentTimeMillis();
+
+		Table.log(this, "Merged tables. New size [" + getRows().getSize() + " x " + getColumns().getSize() + "]. Time: "
+				+ (end - start) + " ms");
 
 	}
 
@@ -253,10 +250,16 @@ public class Table {
 
 	public TableIndex createIndex(String column) throws IOException {
 		Table.log(this, "Creating index on column " + column + "...");
+
+		long start = System.currentTimeMillis();
+
 		assertsColumnExists(column);
 		TableIndex index = new TableIndex(this);
 		index.build(getColumn(column));
-		Table.log(this, "Index created.");
+
+		long end = System.currentTimeMillis();
+
+		Table.log(this, "Index created. Time: " + (end - start) + " ms");
 		return index;
 	}
 
@@ -342,7 +345,7 @@ public class Table {
 		table.getColumns().append(new StringColumn("missings"));
 		table.getColumns().append(new StringColumn("n"));
 		for (AbstractColumn column : storage) {
-			Row row = new Row();
+			Row row = table.getRows().append();
 			row.setString("column", column.getName());
 			row.setString("type", column.getType());
 			row.setString("min", column.getMin());
@@ -350,7 +353,6 @@ public class Table {
 			row.setString("max", column.getMax());
 			row.setString("missings", column.getMissings());
 			row.setString("n", (column.getSize() - column.getMissings()));
-			table.getRows().append(row);
 		}
 		return table;
 	}
@@ -384,10 +386,10 @@ public class Table {
 		columns.clear();
 		rows.clear();
 	}
-	
+
 	public static void log(Table table, String message) {
 		if (logging) {
-			log(table.getName() + ": " + message);
+			log("[" + table.getName() + "] " + message);
 		}
 	}
 

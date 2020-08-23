@@ -145,7 +145,9 @@ table.getColumn("column_name").apply(function);
 ```java
 table.getColumns().append("column_name", builder())
 table.getColumns().rename("column_name", "new_name")
-table.getRows().append(row)
+
+Row row = table.getRows().append();
+row.set("column_name", value);
 ```
 
 ### Sorting data

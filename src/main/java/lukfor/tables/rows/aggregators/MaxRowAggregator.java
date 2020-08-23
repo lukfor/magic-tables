@@ -5,6 +5,7 @@ import java.io.IOException;
 import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.rows.IRowAggregator;
+import lukfor.tables.rows.Row;
 
 public class MaxRowAggregator implements IRowAggregator {
 
@@ -31,7 +32,9 @@ public class MaxRowAggregator implements IRowAggregator {
 		Object key = group.get(0, keyColumn);
 		Object max = group.getColumn(valueColumn).getMax();
 
-		table.getRows().append(key, max);
+		Row row = table.getRows().append();
+		row.set(0, key);
+		row.set(1, max);
 
 		return table;
 	}

@@ -70,6 +70,8 @@ public class TableBuilder {
 	public static Table fromTableReader(String name, ITableReader reader, boolean columnTypeDetection)
 			throws IOException {
 
+		long start = System.currentTimeMillis();
+		
 		Table table = new Table(name);
 
 		for (String column : reader.getColumns()) {
@@ -91,14 +93,18 @@ public class TableBuilder {
 			table.detectTypes();
 		}
 
+		long end = System.currentTimeMillis();
+		
 		Table.log("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
-				+ table.getColumns().getSize() + "] into memory.");
+				+ table.getColumns().getSize() + "] into memory. Time: " + (end - start) + " ms");
 
 		return table;
 	}
 
 	public static Table fromDatabase(Connection connection, String sql) throws SQLException, IOException {
 
+		long start = System.currentTimeMillis();
+		
 		Table table = new Table(sql);
 
 		Statement statement = connection.createStatement();
@@ -120,8 +126,10 @@ public class TableBuilder {
 
 		}
 
+		long end = System.currentTimeMillis();
+		
 		Table.log("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
-				+ table.getColumns().getSize() + "] into memory.");
+				+ table.getColumns().getSize() + "] into memory. Time: " + (end - start) + " ms");
 
 		return table;
 	}

@@ -6,8 +6,7 @@ import lukfor.tables.columns.ColumnType;
 public class StringColumn extends AbstractColumn {
 
 	public StringColumn(String name) {
-		super(100);
-		setName(name);
+		this(name, 100);
 	}
 
 	public StringColumn(String name, int capacity) {

@@ -18,8 +18,7 @@ public class DoubleColumn extends AbstractColumn {
 	}
 
 	public DoubleColumn(String name) {
-		super(100);
-		setName(name);
+		this(name, 100);;
 	}
 
 	public DoubleColumn(String name, int capacity) {
