@@ -31,6 +31,8 @@ public class Table {
 
 	private ColumnOperations columns;
 
+	private static boolean logging = true;
+
 	public Table(String name) {
 		this.name = name;
 		rows = new RowOperations(this);
@@ -95,7 +97,7 @@ public class Table {
 	}
 
 	public Table binBy(final String column, double binSize, IRowAggregator aggregator) throws IOException {
-		return groupBy(new BinRowMapper("MAF", binSize), aggregator);
+		return groupBy(new BinRowMapper(column, binSize), aggregator);
 	}
 
 	public Table groupBy(IRowMapper mapper, IRowAggregator aggregator) throws IOException {
@@ -177,8 +179,7 @@ public class Table {
 
 	public void merge(final Table table2, final String columnTable1, final String columnTable2) throws IOException {
 
-		System.out.println("Merging table " + getName() + " with table " + table2.getName() + " on " + columnTable1
-				+ "=" + columnTable2 + "...");
+		Table.log(this, "Merging with table " + table2.getName() + " on " + columnTable1 + "=" + columnTable2 + "...");
 
 		final List<String> columnsTable2 = new Vector<String>();
 
@@ -215,7 +216,7 @@ public class Table {
 			}
 		});
 
-		System.out.println("Merged tables. New size [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
+		Table.log(this, "Merged tables. New size [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
 
 	}
 
@@ -228,7 +229,7 @@ public class Table {
 	}
 
 	public Table clone() {
-
+		Table.log(this, "Cloing table...");
 		Table table = null;
 		try {
 			table = cloneStructure("cloned");
@@ -238,7 +239,7 @@ public class Table {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		Table.log(this, "Table cloned.");
 		return table;
 	}
 
@@ -251,10 +252,11 @@ public class Table {
 	}
 
 	public TableIndex createIndex(String column) throws IOException {
-
+		Table.log(this, "Creating index on column " + column + "...");
 		assertsColumnExists(column);
 		TableIndex index = new TableIndex(this);
 		index.build(getColumn(column));
+		Table.log(this, "Index created.");
 		return index;
 	}
 
@@ -363,16 +365,38 @@ public class Table {
 
 	public void detectTypes() throws IOException {
 
+		Table.log(this, "Detecting table types...");
+
 		// try to find the right type
 		for (int i = 0; i < getColumns().getSize(); i++) {
 			AbstractColumn column = getColumns().get(i);
 			ColumnType type = ColumnTypeDetector.guessType(column);
 			if (type != column.getType()) {
-				System.out.println("Update type of " + column.getName() + " to " + type + "...");
+				Table.log(this, "  Update type of " + column.getName() + " to " + type + "...");
 				getColumns().setType(column, type);
 			}
 		}
+		Table.log(this, "Types updated.");
+	}
 
+	public static void log(Table table, String message) {
+		if (logging) {
+			log(table.getName() + ": " + message);
+		}
+	}
+
+	public static void log(String message) {
+		if (logging) {
+			System.out.println(message);
+		}
+	}
+
+	public static void disableLog() {
+		logging = false;
+	}
+
+	public static void enableLog() {
+		logging = true;
 	}
 
 }

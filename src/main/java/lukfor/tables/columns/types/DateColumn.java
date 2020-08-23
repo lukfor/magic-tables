@@ -45,7 +45,7 @@ public class DateColumn extends AbstractColumn {
 			try {
 				return dateFormat.parse(data);
 			} catch (ParseException e) {
-				System.out.println("Column " + getName() + ": Error parsing '" + data + "' to date.");
+				//System.out.println("Column " + getName() + ": Error parsing '" + data + "' to date.");
 				return null;
 			}
 		}

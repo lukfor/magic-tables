@@ -129,6 +129,8 @@ public class RowOperations {
 
 	public void drop(List<Boolean> bitmask) throws IOException {
 
+		Table.log(table, "Droping rows...");
+
 		int rowsBefore = getSize();
 
 		for (AbstractColumn column : table.storage) {
@@ -137,9 +139,9 @@ public class RowOperations {
 
 		int rowsAfter = getSize();
 
-		System.out.println("Droped table.");
-		System.out.println("  #Rows before droping: " + rowsBefore);
-		System.out.println("  #Rows after droping: " + rowsAfter);
+		Table.log(table, "#Rows before: " + rowsBefore);
+		Table.log(table, "#Rows after: " + rowsAfter);
+		Table.log(table, "Droped rows.");
 
 	}
 
@@ -187,6 +189,8 @@ public class RowOperations {
 
 	public void select(List<Boolean> bitmask) throws IOException {
 
+		Table.log(table, "Filtering rows...");
+
 		int rowsBefore = getSize();
 
 		for (AbstractColumn column : table.storage) {
@@ -195,8 +199,9 @@ public class RowOperations {
 
 		int rowsAfter = getSize();
 
-		System.out.println("Filtering table " + table.getName() + "...");
-		System.out.println("Filtered table. Rows after filtering: " + rowsAfter);
+		Table.log(table, "#Rows before: " + rowsBefore);
+		Table.log(table, "#Rows after: " + rowsAfter);
+		Table.log(table, "Filtered table.");
 
 	}
 

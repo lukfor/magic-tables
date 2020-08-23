@@ -22,8 +22,8 @@ public class TableIndex {
 		for (int i = 0; i < column.getSize(); i++) {
 			Object value = column.get(i);
 			if (index.containsKey(value)) {
-				throw new IOException("Index creation not possible. Values in column are not unique. For example '"
-						+ value + "' found twice.");
+				throw new IOException("Index creation not possible. Values in column '" + column
+						+ "' are not unique. For example '" + value + "' found twice.");
 			}
 			index.put(value, i);
 		}

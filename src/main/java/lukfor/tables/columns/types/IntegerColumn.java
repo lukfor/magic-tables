@@ -28,7 +28,7 @@ public class IntegerColumn extends AbstractColumn {
 			try {
 				return Integer.parseInt(data);
 			} catch (Exception e) {
-				System.out.println("Column " + getName() + ": Error parsing '" + data + "' to integer.");
+				//System.out.println("Column " + getName() + ": Error parsing '" + data + "' to integer.");
 				throw e;
 			}
 		}

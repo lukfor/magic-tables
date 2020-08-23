@@ -16,8 +16,6 @@ import genepi.io.table.reader.ExcelTableReader;
 import genepi.io.table.reader.ITableReader;
 import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
-import lukfor.tables.columns.ColumnType;
-import lukfor.tables.columns.ColumnTypeDetector;
 import lukfor.tables.columns.types.StringColumn;
 import lukfor.tables.io.options.CsvTableOptions;
 import lukfor.tables.io.options.ExcelTableOptions;
@@ -29,11 +27,11 @@ public class TableBuilder {
 	}
 
 	public static Table fromCsvFile(CsvTableOptions options) throws IOException {
-		System.out.println("Reading Csv file " + options.getFilename() + "...");
-				
+		Table.log("Reading Csv file " + options.getFilename() + "...");
+
 		FileInputStream inputStream = new FileInputStream(options.getFilename());
 		InputStream in2 = FileUtil.decompressStream(inputStream);
-		
+
 		ITableReader reader = new CsvTableReader(new DataInputStream(in2), options.getSeparator());
 
 		String name = FileUtil.getFilename(options.getFilename());
@@ -46,7 +44,7 @@ public class TableBuilder {
 
 	public static Table fromXlsFile(ExcelTableOptions options) throws IOException {
 
-		System.out.println("Reading Excel file " + options.getFilename() + "...");
+		Table.log("Reading Excel file " + options.getFilename() + "...");
 		ITableReader reader = new ExcelTableReader(options.getFilename());
 
 		String name = FileUtil.getFilename(options.getFilename());
@@ -57,10 +55,10 @@ public class TableBuilder {
 
 		ITableReader reader = null;
 		if (filename.endsWith(".xls")) {
-			System.out.println("Reading Excel file " + filename + "...");
+			Table.log("Reading Excel file " + filename + "...");
 			reader = new ExcelTableReader(filename);
 		} else {
-			System.out.println("Reading Csv file " + filename + "...");
+			Table.log("Reading Csv file " + filename + "...");
 			reader = new CsvTableReader(filename, separator);
 		}
 
@@ -93,7 +91,7 @@ public class TableBuilder {
 			table.detectTypes();
 		}
 
-		System.out.println("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
+		Table.log("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
 				+ table.getColumns().getSize() + "] into memory.");
 
 		return table;
@@ -122,7 +120,7 @@ public class TableBuilder {
 
 		}
 
-		System.out.println("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
+		Table.log("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
 				+ table.getColumns().getSize() + "] into memory.");
 
 		return table;

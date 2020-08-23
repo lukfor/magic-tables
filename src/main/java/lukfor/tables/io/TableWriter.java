@@ -2,7 +2,6 @@ package lukfor.tables.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import genepi.io.table.writer.CsvTableWriter;
@@ -37,7 +36,7 @@ public class TableWriter {
 	public static void writeToCsv(Table table, String filename, char outputSeparator, boolean quote)
 			throws IOException {
 
-		System.out.println("Writing file " + filename + "...");
+		Table.log(table, "Writing file " + filename + "...");
 		CsvTableWriter writer = new CsvTableWriter(filename, outputSeparator, quote);
 		writeToTableWriter(table, writer);
 
@@ -45,7 +44,7 @@ public class TableWriter {
 
 	public static void writeToXls(Table table, String filename) throws IOException {
 
-		System.out.println("Writing file " + filename + "...");
+		Table.log(table, "Writing file " + filename + "...");
 		ExcelTableWriter writer = new ExcelTableWriter(filename);
 		writeToTableWriter(table, writer);
 
@@ -85,13 +84,13 @@ public class TableWriter {
 		});
 		writer.close();
 
-		System.out.println(
+		Table.log(table,
 				"Wrote " + table.getRows().getSize() + " rows and " + table.getColumns().getSize() + " columns.");
 
 	}
 
 	public static void writeToSasCsv(final Table table, String filename) throws IOException {
-		
+
 		String separator = ",";
 		String quote = "\"";
 		String missingNumber = ".";
@@ -156,7 +155,7 @@ public class TableWriter {
 		});
 		writer.close();
 
-		System.out.println(
+		Table.log(table,
 				"Wrote " + table.getRows().getSize() + " rows and " + table.getColumns().getSize() + " columns.");
 
 	}

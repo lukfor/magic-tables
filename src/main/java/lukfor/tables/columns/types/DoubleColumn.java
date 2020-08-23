@@ -40,7 +40,7 @@ public class DoubleColumn extends AbstractColumn {
 			try {
 				return Double.parseDouble(data);
 			} catch (Exception e) {
-				System.out.println("Column " + getName() + ": Error parsing '" + data + "' to double.");
+				//System.out.println("Column " + getName() + ": Error parsing '" + data + "' to double.");
 				throw e;
 			}
 		}
