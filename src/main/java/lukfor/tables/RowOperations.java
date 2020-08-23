@@ -232,4 +232,8 @@ public class RowOperations {
 		return data;
 	}
 
+	public void clear() {
+		// currently nothing to clear.
+	}
+
 }

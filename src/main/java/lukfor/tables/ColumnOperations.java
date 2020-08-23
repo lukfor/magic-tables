@@ -1,7 +1,9 @@
 package lukfor.tables;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import lukfor.tables.columns.AbstractColumn;
@@ -20,50 +22,67 @@ public class ColumnOperations {
 
 	private List<AbstractColumn> columns = new Vector<AbstractColumn>();
 
+	private Map<String, AbstractColumn> columnsIndex = new HashMap<String, AbstractColumn>();
+
 	public ColumnOperations(Table table) {
 		this.table = table;
 		this.columns = table.storage;
+		for (AbstractColumn column : this.columns) {
+			this.columnsIndex.put(column.getName(), column);
+		}
 	}
 
 	public AbstractColumn get(String name) {
-		for (AbstractColumn column : columns) {
-			if (column.getName().equals(name)) {
-				return column;
-			}
+		AbstractColumn column = columnsIndex.get(name);
+		if (column != null) {
+			return column;
+		} else {
+			throw new RuntimeException("Column '" + name + "' not found.");
 		}
-		return null;
 	}
 
 	public AbstractColumn get(int index) {
-		return columns.get(index);
+		if (index >= 0 && index < columns.size()) {
+			return columns.get(index);
+		} else {
+			throw new RuntimeException("Column index " + index + " is out of bounds.");
+		}
+
 	}
 
 	public void rename(String oldName, String newName) throws IOException {
 		table.assertsColumnExists(oldName);
+		if (columnsIndex.get(newName) != null) {
+			throw new IOException("Duplicate column '" + newName + ".");
+		}
 		AbstractColumn column = get(oldName);
 		column.setName(newName);
+		columnsIndex.remove(oldName);
+		columnsIndex.put(newName, column);
 	}
 
 	public AbstractColumn append(AbstractColumn column) throws IOException {
 		append(column, new IBuildValueFunction() {
-			
+
 			@Override
 			public Object buildValue(Row row) throws IOException {
 				return null;
 			}
 		});
-		
+
 		return column;
-		
+
 	}
 
 	public AbstractColumn append(final AbstractColumn column, final IBuildValueFunction builder) throws IOException {
 
-		if (get(column.getName()) != null) {
+		if (columnsIndex.get(column.getName()) != null) {
 			throw new IOException("Duplicate column '" + column + ".");
 		}
 
 		columns.add(column);
+		columnsIndex.put(column.getName(), column);
+
 		if (builder != null) {
 
 			table.forEachRow(new IRowProcessor() {
@@ -80,9 +99,9 @@ public class ColumnOperations {
 			});
 
 		}
-		
+
 		return column;
-		
+
 	}
 
 	public void setType(String column, ColumnType type) throws IOException {
@@ -99,7 +118,7 @@ public class ColumnOperations {
 
 		int index = columns.indexOf(column);
 		columns.set(index, newColumn);
-
+		columnsIndex.put(column.getName(), newColumn);
 	}
 
 	public String[] getNames() {
@@ -137,6 +156,9 @@ public class ColumnOperations {
 			}
 		}
 		columns.removeAll(removedColumns);
+		for (AbstractColumn removedColumn : removedColumns) {
+			columnsIndex.remove(removedColumn.getName());
+		}
 	}
 
 	public void select(String... names) throws IOException {
@@ -155,10 +177,18 @@ public class ColumnOperations {
 			}
 		}
 		columns.removeAll(removedColumns);
+		for (AbstractColumn removedColumn : removedColumns) {
+			columnsIndex.remove(removedColumn.getName());
+		}
 	}
 
 	public int getSize() {
 		return columns.size();
+	}
+
+	public void clear() {
+		columns.clear();
+		columnsIndex.clear();
 	}
 
 }

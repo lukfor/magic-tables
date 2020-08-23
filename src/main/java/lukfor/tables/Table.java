@@ -379,6 +379,12 @@ public class Table {
 		Table.log(this, "Types updated.");
 	}
 
+	public void clear() {
+		storage.clear();
+		columns.clear();
+		rows.clear();
+	}
+	
 	public static void log(Table table, String message) {
 		if (logging) {
 			log(table.getName() + ": " + message);
