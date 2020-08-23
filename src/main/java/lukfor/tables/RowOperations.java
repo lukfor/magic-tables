@@ -22,11 +22,7 @@ public class RowOperations {
 	}
 
 	public Row get(int index) {
-		Row row = new Row(index);
-		for (AbstractColumn column : table.storage) {
-			Object value = column.get(index);
-			row.set(column.getName(), value);
-		}
+		Row row = new Row(table, index);
 		return row;
 	}
 
@@ -64,33 +60,12 @@ public class RowOperations {
 		return results;
 	}
 
-	public void append(Object... values) throws IOException {
-
-		if (values.length != table.getColumns().getSize()) {
-			throw new IOException("Length of array 'values' is different the number of columns");
-		}
-
-		for (int i = 0; i < values.length; i++) {
-			AbstractColumn column = table.getColumn(i);
-			column.add(values[i]);
-		}
-	}
-
-	public void append(Row row) throws IOException {
+	public Row append() throws IOException {
 		for (AbstractColumn column : table.storage) {
-			Object object = row.getObject(column.getName());
-			if (object != null) {
-				if (column.accepts(object)) {
-					column.add(object);
-				} else {
-					throw new IOException(
-							"Object in column " + column.getName() + " has wrong class: " + object.getClass());
-
-				}
-			} else {
-				column.add(null);
-			}
+			column.add(null);
 		}
+		int index = table.getRows().getSize() - 1;
+		return new Row(table, index);
 	}
 
 	public void sortBy(final String column) throws IOException {

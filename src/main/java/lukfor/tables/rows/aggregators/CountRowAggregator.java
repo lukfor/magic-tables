@@ -6,6 +6,7 @@ import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.types.IntegerColumn;
 import lukfor.tables.rows.IRowAggregator;
+import lukfor.tables.rows.Row;
 
 public class CountRowAggregator implements IRowAggregator {
 
@@ -26,7 +27,9 @@ public class CountRowAggregator implements IRowAggregator {
 		Object key = group.get(0, keyColumn);
 		int count = group.getRows().getSize();
 		
-		table.getRows().append(key, count);
+		Row row = table.getRows().append();
+		row.set(0, key);
+		row.set(1, count);
 
 		return table;
 	}

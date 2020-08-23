@@ -14,15 +14,11 @@ public class DateColumn extends AbstractColumn {
 	public String pattern = "yyyy.MM.dd";
 
 	public DateColumn(String name) {
-		super(100);
-		setName(name);
+		this(name, 100, "yyyy.MM.dd");
 	}
 
 	public DateColumn(String name, String pattern) {
-		super(100);
-		setName(name);
-		this.dateFormat = new SimpleDateFormat(pattern);
-		this.pattern = pattern;
+		this(name, 100, pattern);
 	}
 
 	public DateColumn(String name, int capacity, String pattern) {

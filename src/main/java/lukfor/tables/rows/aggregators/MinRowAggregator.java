@@ -5,6 +5,7 @@ import java.io.IOException;
 import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.rows.IRowAggregator;
+import lukfor.tables.rows.Row;
 
 public class MinRowAggregator implements IRowAggregator {
 
@@ -31,7 +32,9 @@ public class MinRowAggregator implements IRowAggregator {
 		Object key = group.get(0, keyColumn);
 		Object min = group.getColumn(valueColumn).getMin();
 
-		table.getRows().append(key, min);
+		Row row = table.getRows().append();
+		row.set(0, key);
+		row.set(1, min);
 
 		return table;
 	}

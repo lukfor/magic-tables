@@ -19,7 +19,7 @@ public abstract class AbstractColumn {
 	public AbstractColumn(int initSize) {
 		storage = new Vector<Object>(initSize);
 	}
-	
+
 	public void copyDataFrom(AbstractColumn column) {
 		for (int i = 0; i < column.getSize(); i++) {
 			Object object = column.get(i);
@@ -30,19 +30,19 @@ public abstract class AbstractColumn {
 			}
 		}
 	}
-	
+
 	public void replaceDataFrom(AbstractColumn column) {
 		for (int i = 0; i < column.getSize(); i++) {
 			Object object = column.get(i);
 			if (object != null) {
-				storage.set(i,valueToObject(object.toString()));
+				storage.set(i, valueToObject(object.toString()));
 			} else {
 				storage.set(i, null);
 			}
 		}
 	}
-	
-	public List<Number> getValues(){
+
+	public List<Number> getValues() {
 		List<Number> numbers = new Vector<Number>();
 		for (int i = 0; i < getSize(); i++) {
 			Object object = get(i);
@@ -62,7 +62,16 @@ public abstract class AbstractColumn {
 	public abstract ColumnType getType();
 
 	public void set(int index, Object data) {
-		storage.set(index, data);
+		if (isMissingValue(data)) {
+			storage.set(index, null);
+		} else {
+			if (accepts(data)) {
+				storage.set(index, data);
+			} else {
+				throw new RuntimeException("Object in column " + name + " ["+ getClass() +"] has wrong class: " + data.getClass());
+			}
+
+		}
 	}
 
 	public abstract boolean accepts(Object data);
@@ -75,7 +84,13 @@ public abstract class AbstractColumn {
 		if (isMissingValue(data)) {
 			storage.add(null);
 		} else {
-			storage.add(data);
+			if (accepts(data)) {
+				storage.add(data);
+			} else {
+				throw new RuntimeException("Object in column " + " ["+ getClass() +"] has wrong class: " + data.getClass());
+
+			}
+
 		}
 	}
 

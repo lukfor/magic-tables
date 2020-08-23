@@ -237,7 +237,7 @@ public class TableTest extends TestCase {
 		assertEquals(4, table.get(2, 3));
 
 	}
-	
+
 	public void testApply() throws IOException {
 
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
@@ -303,7 +303,7 @@ public class TableTest extends TestCase {
 		assertEquals(4, table2.getColumns().getSize());
 		table.merge(table2, "id");
 		assertEquals(6, table.getColumns().getSize());
-		assertEquals(3, table.getRows().getSize());		
+		assertEquals(3, table.getRows().getSize());
 		File output = File.createTempFile("test", ".csv");
 		TableWriter.writeToCsv(table, output);
 		assertEquals(FileUtil.readFileAsString("data/dummy_joined.csv"),
@@ -315,13 +315,37 @@ public class TableTest extends TestCase {
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 		assertEquals(3, table.getColumns().getSize());
 		assertEquals(3, table.getRows().getSize());
-		Row row = new Row();
+		Row row = table.getRows().append();
 		row.set("id", 5);
 		row.set("a", 5);
 		row.set("b", null);
-		table.getRows().append(row);
 		assertEquals(3, table.getColumns().getSize());
 		assertEquals(4, table.getRows().getSize());
+		assertEquals(5, table.getRows().get(3).getObject("id"));
+		assertEquals(5, table.getRows().get(3).getObject("a"));
+		assertEquals(null, table.getRows().get(3).getObject("b"));
+
+	}
+
+	public void testAppendRowWrongTypes() throws IOException {
+
+		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
+		assertEquals(3, table.getColumns().getSize());
+		assertEquals(3, table.getRows().getSize());
+		Row row = table.getRows().append();
+		row.set("id", 5);
+		try {
+			row.set("a", "test");
+			assertTrue(false);
+		} catch (Exception e) {
+			// Wrong data type throw exception
+		}
+		row.set("b", "lukas");
+		assertEquals(3, table.getColumns().getSize());
+		assertEquals(4, table.getRows().getSize());
+		assertEquals(5, table.getRows().get(3).getObject("id"));
+		assertEquals(null, table.getRows().get(3).getObject("a"));
+		assertEquals("lukas", table.getRows().get(3).getObject("b"));
 
 	}
 
