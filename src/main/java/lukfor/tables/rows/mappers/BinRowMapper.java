@@ -17,9 +17,9 @@ public class BinRowMapper implements IRowMapper {
 	}
 
 	@Override
-	public Object getKey(Row row) throws IOException {
-		double value = row.getDouble(columnValue);
-		return Math.floor(value / binSize) * binSize;
+	public Object getKey(Row row) throws IOException {		
+		Number value = (Number) row.getObject(columnValue);
+		return Math.floor(value.doubleValue() / binSize) * binSize;
 	}
 
 }

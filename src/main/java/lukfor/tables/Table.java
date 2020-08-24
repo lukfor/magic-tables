@@ -16,6 +16,7 @@ import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.IRowProcessor;
 import lukfor.tables.rows.Row;
 import lukfor.tables.rows.TableIndex;
+import lukfor.tables.rows.aggregators.CountRowAggregator;
 import lukfor.tables.rows.mappers.BinRowMapper;
 import lukfor.tables.rows.processors.RowCopyProcessor;
 import lukfor.tables.rows.processors.RowGroupProcessor;
@@ -53,6 +54,10 @@ public class Table {
 
 	public AbstractColumn getColumn(int index) {
 		return columns.get(index);
+	}
+
+	public Row getRow(int index) {
+		return rows.get(index);
 	}
 
 	public void forEachRow(final IRowProcessor processor) throws IOException {
@@ -96,6 +101,10 @@ public class Table {
 
 	public Table binBy(final String column, double binSize, IRowAggregator aggregator) throws IOException {
 		return groupBy(new BinRowMapper(column, binSize), aggregator);
+	}
+
+	public Table hist(final String column, double binSize) throws IOException {
+		return groupBy(new BinRowMapper(column, binSize), new CountRowAggregator(column));
 	}
 
 	public Table groupBy(IRowMapper mapper, IRowAggregator aggregator) throws IOException {

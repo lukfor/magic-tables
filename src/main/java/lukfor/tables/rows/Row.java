@@ -67,6 +67,12 @@ public class Row {
 		table.getColumn(column).set(index, value);
 	}
 
+	public void set(Object[] values) {
+		for (int i = 0; i < values.length; i++) {
+			table.getColumn(i).set(index, values[i]);
+		}
+	}
+	
 	public void setString(String column, Object value) {
 		if (value != null) {
 
