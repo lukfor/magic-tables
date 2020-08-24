@@ -21,13 +21,15 @@ public class IntegerColumn extends AbstractColumn {
 
 	@Override
 	public Object valueToObject(String data) {
-		if (data.equals(".") || data.equals("") || data.equals("NaN") || data.equals("*")) {
+		if (data.equals(".") || data.equals("") || data.equalsIgnoreCase("NA") || data.equals("NaN")
+				|| data.equals("*")) {
 			return null;
 		} else {
 			try {
 				return Integer.parseInt(data);
 			} catch (Exception e) {
-				//System.out.println("Column " + getName() + ": Error parsing '" + data + "' to integer.");
+				// System.out.println("Column " + getName() + ": Error parsing '" + data + "' to
+				// integer.");
 				throw e;
 			}
 		}

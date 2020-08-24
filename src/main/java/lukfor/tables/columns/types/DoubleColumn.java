@@ -33,7 +33,7 @@ public class DoubleColumn extends AbstractColumn {
 
 	@Override
 	public Object valueToObject(String data) {
-		if (data.equals(".") || data.equals("") || data.equals("NaN") || data.equals("*")) {
+		if (data.equals(".") || data.equals("") || data.equalsIgnoreCase("NA") || data.equalsIgnoreCase("NaN") || data.equals("*")) {
 			return null;
 		} else {
 			try {
