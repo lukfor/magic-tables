@@ -15,7 +15,6 @@ import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.IRowProcessor;
 import lukfor.tables.rows.Row;
 import lukfor.tables.rows.TableIndex;
-import lukfor.tables.rows.aggregators.CountRowAggregator;
 import lukfor.tables.rows.mappers.BinRowMapper;
 import lukfor.tables.rows.processors.RowCopyProcessor;
 import lukfor.tables.rows.processors.RowGroupProcessor;
@@ -98,12 +97,18 @@ public class Table {
 
 	}
 
+
+	public GroupByBuilder binBy(final String column, double binSize) {
+		BinRowMapper mapper = new BinRowMapper(column, binSize);
+		return new GroupByBuilder(this, mapper, column);
+	}
+	
 	public Table binBy(final String column, double binSize, IRowAggregator aggregator) {
 		return groupBy(new BinRowMapper(column, binSize), aggregator);
 	}
 
 	public Table hist(final String column, double binSize) {
-		Table hist = groupBy(new BinRowMapper(column, binSize), new CountRowAggregator(column));
+		Table hist = binBy(column, binSize).count();
 		hist.getRows().sortBy(column);
 		return hist;
 	}
