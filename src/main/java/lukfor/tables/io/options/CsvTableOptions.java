@@ -21,10 +21,12 @@ public class CsvTableOptions {
 
 	private boolean columnTypeDetection = true;
 
+	private String[] columns = null;
+
 	public CsvTableOptions(String filename) {
 		this.filename = filename;
 	}
-	
+
 	public String getFilename() {
 		return filename;
 	}
@@ -74,6 +76,15 @@ public class CsvTableOptions {
 		return this;
 	}
 
+	public String[] getColumns() {
+		return columns;
+	}
+
+	public CsvTableOptions withColumns(String... columns) {
+		this.columns = columns;
+		return this;
+	}
+
 	public boolean isColumnTypeDetection() {
 		return columnTypeDetection;
 	}
@@ -84,7 +95,7 @@ public class CsvTableOptions {
 	}
 
 	public Table load() throws IOException {
-		return TableBuilder.fromCsvFile(this); 
+		return TableBuilder.fromCsvFile(this);
 	}
 
 }

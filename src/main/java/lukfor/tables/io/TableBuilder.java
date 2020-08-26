@@ -35,7 +35,7 @@ public class TableBuilder {
 		ITableReader reader = new CsvTableReader(new DataInputStream(in2), options.getSeparator());
 
 		String name = FileUtil.getFilename(options.getFilename());
-		return fromTableReader(name, reader, options.isColumnTypeDetection());
+		return fromTableReader(name, reader, options.isColumnTypeDetection(), options.getColumns());
 	}
 
 	public static ExcelTableOptions fromXlsFile(String filename) throws IOException {
@@ -48,7 +48,7 @@ public class TableBuilder {
 		ITableReader reader = new ExcelTableReader(options.getFilename());
 
 		String name = FileUtil.getFilename(options.getFilename());
-		return fromTableReader(name, reader, options.isColumnTypeDetection());
+		return fromTableReader(name, reader, options.isColumnTypeDetection(), null);
 	}
 
 	public static Table fromFile(String filename, char separator) throws IOException {
@@ -63,23 +63,27 @@ public class TableBuilder {
 		}
 
 		String name = FileUtil.getFilename(filename);
-		return fromTableReader(name, reader, true);
+		return fromTableReader(name, reader, true, null);
 
 	}
 
-	public static Table fromTableReader(String name, ITableReader reader, boolean columnTypeDetection)
+	public static Table fromTableReader(String name, ITableReader reader, boolean columnTypeDetection, String[] columns)
 			throws IOException {
 
 		long start = System.currentTimeMillis();
-		
+
 		Table table = new Table(name);
 
-		for (String column : reader.getColumns()) {
+		if (columns == null || columns.length == 0) {
+			columns = reader.getColumns();
+		}
+
+		for (String column : columns) {
 			table.getColumns().append(new StringColumn(column));
 		}
 
 		while (reader.next()) {
-			for (int i = 0; i < table.getColumns().getSize(); i++) {
+			for (int i = 0; i < columns.length; i++) {
 				AbstractColumn column = table.getColumns().get(i);
 				String value = reader.getString(column.getName());
 				Object object = column.valueToObject(value);
@@ -94,7 +98,7 @@ public class TableBuilder {
 		}
 
 		long end = System.currentTimeMillis();
-		
+
 		Table.log("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
 				+ table.getColumns().getSize() + "] into memory. Time: " + (end - start) + " ms");
 
@@ -104,7 +108,7 @@ public class TableBuilder {
 	public static Table fromDatabase(Connection connection, String sql) throws SQLException, IOException {
 
 		long start = System.currentTimeMillis();
-		
+
 		Table table = new Table(sql);
 
 		Statement statement = connection.createStatement();
@@ -127,7 +131,7 @@ public class TableBuilder {
 		}
 
 		long end = System.currentTimeMillis();
-		
+
 		Table.log("Loaded table " + table.getName() + " [" + table.getRows().getSize() + " x "
 				+ table.getColumns().getSize() + "] into memory. Time: " + (end - start) + " ms");
 
