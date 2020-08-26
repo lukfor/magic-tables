@@ -1,7 +1,5 @@
 package lukfor.tables.rows.mappers;
 
-import java.io.IOException;
-
 import lukfor.tables.rows.IRowMapper;
 import lukfor.tables.rows.Row;
 
@@ -17,7 +15,7 @@ public class BinRowMapper implements IRowMapper {
 	}
 
 	@Override
-	public Object getKey(Row row) throws IOException {		
+	public Object getKey(Row row) {		
 		Number value = (Number) row.getObject(columnValue);
 		return Math.floor(value.doubleValue() / binSize) * binSize;
 	}

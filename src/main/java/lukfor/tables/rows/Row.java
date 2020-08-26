@@ -1,7 +1,5 @@
 package lukfor.tables.rows;
 
-import java.io.IOException;
-
 import lukfor.tables.Table;
 import lukfor.tables.columns.types.DoubleColumn;
 
@@ -21,41 +19,41 @@ public class Row {
 		this.index = index;
 	}
 
-	public void fill(Row row) throws IOException {
-		for (String column: row.table.getColumns().getNames()) {
+	public void fill(Row row) {
+		for (String column : row.table.getColumns().getNames()) {
 			set(column, row.getObject(column));
 		}
 	}
 
-	public Object getObject(String column) throws IOException {
+	public Object getObject(String column) {
 		return table.get(index, column);
 	}
 
-	public String getString(String column) throws IOException {
+	public String getString(String column) {
 		return (String) getObject(column);
 	}
 
-	public int getInteger(String column) throws IOException {
+	public int getInteger(String column) {
 		return (Integer) getObject(column);
 	}
 
-	public double getDouble(String column) throws IOException {
+	public double getDouble(String column) {
 		return (Double) getObject(column);
 	}
 
-	public Object getObject(int column) throws IOException {
+	public Object getObject(int column) {
 		return table.get(index, column);
 	}
 
-	public String getString(int column) throws IOException {
+	public String getString(int column) {
 		return (String) getObject(column);
 	}
 
-	public int getInteger(int column) throws IOException {
+	public int getInteger(int column) {
 		return (Integer) getObject(column);
 	}
 
-	public double getDouble(int column) throws IOException {
+	public double getDouble(int column) {
 		return (Double) getObject(column);
 	}
 
@@ -72,7 +70,7 @@ public class Row {
 			table.getColumn(i).set(index, values[i]);
 		}
 	}
-	
+
 	public void setString(String column, Object value) {
 		if (value != null) {
 

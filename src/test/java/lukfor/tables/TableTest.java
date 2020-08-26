@@ -67,7 +67,7 @@ public class TableTest extends TestCase {
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 		assertEquals(3, table.getColumns().getSize());
 		table.getRows().select(new IRowFilter() {
-			public boolean accepts(Row row) throws IOException {
+			public boolean accepts(Row row) {
 				return (row.getString("b").equals("z"));
 			}
 		});
@@ -91,7 +91,7 @@ public class TableTest extends TestCase {
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 		assertEquals(3, table.getColumns().getSize());
 		List<Row> rows = table.getRows().getAll(new IRowFilter() {
-			public boolean accepts(Row row) throws IOException {
+			public boolean accepts(Row row) {
 				return (row.getString("b").equals("z"));
 			}
 		});
@@ -117,7 +117,7 @@ public class TableTest extends TestCase {
 		Table table = TableBuilder.fromCsvFile("data/dummy.csv").load();
 		assertEquals(3, table.getColumns().getSize());
 		table.getRows().drop(new IRowFilter() {
-			public boolean accepts(Row row) throws IOException {
+			public boolean accepts(Row row) {
 				return (row.getString("b").equals("z"));
 			}
 		});
@@ -226,7 +226,7 @@ public class TableTest extends TestCase {
 		assertEquals(3, table.getColumns().getSize());
 		assertEquals(3, table.getRows().getSize());
 		table.getColumns().append(new IntegerColumn("id_2"), new IBuildValueFunction() {
-			public Object buildValue(Row row) throws IOException {
+			public Object buildValue(Row row) {
 				return row.getInteger("id") * 2;
 			}
 		});

@@ -1,7 +1,5 @@
 package lukfor.tables.rows.aggregators;
 
-import java.io.IOException;
-
 import lukfor.tables.Table;
 import lukfor.tables.columns.AbstractColumn;
 import lukfor.tables.columns.types.DoubleColumn;
@@ -20,7 +18,7 @@ public class MeanRowAggregator implements IRowAggregator {
 	}
 
 	@Override
-	public Table aggregate(Object key2, Table group) throws IOException {
+	public Table aggregate(Object key2, Table group) {
 
 		Table table = new Table(group.getName() + ":reduced");
 		AbstractColumn newKeyColumn = group.getColumn(keyColumn).cloneStructure();

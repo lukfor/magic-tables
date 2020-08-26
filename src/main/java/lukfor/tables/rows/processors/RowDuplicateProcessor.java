@@ -1,6 +1,5 @@
 package lukfor.tables.rows.processors;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +14,7 @@ public class RowDuplicateProcessor implements IRowProcessor {
 
 	private Set<Integer> uniques = new HashSet<Integer>();
 	
-	public void process(Row row) throws IOException {
+	public void process(Row row) {
 		
 		int hash = row.getHashCode();
 		if (uniques.contains(hash)) {

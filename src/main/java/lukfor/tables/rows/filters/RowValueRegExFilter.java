@@ -1,7 +1,5 @@
 package lukfor.tables.rows.filters;
 
-import java.io.IOException;
-
 import lukfor.tables.rows.Row;
 
 public class RowValueRegExFilter implements IRowFilter {
@@ -15,7 +13,7 @@ public class RowValueRegExFilter implements IRowFilter {
 		this.regex = regex;
 	}
 
-	public boolean accepts(Row row) throws IOException {
+	public boolean accepts(Row row) {
 		Object value = row.getObject(column);
 		if (value != null) {
 			return value.toString().matches(regex);

@@ -26,10 +26,10 @@ public class RowOperations {
 		return row;
 	}
 
-	public List<Row> getAll(final String column, final Object value) throws IOException {
+	public List<Row> getAll(final String column, final Object value) {
 
 		return getAll(new IRowFilter() {
-			public boolean accepts(Row row) throws IOException {
+			public boolean accepts(Row row) {
 				Object valueRow = row.getObject(column);
 				return valueRow.equals(value);
 			}
@@ -37,10 +37,10 @@ public class RowOperations {
 
 	}
 
-	public List<Row> getAllByRegEx(final String column, final String value) throws IOException {
+	public List<Row> getAllByRegEx(final String column, final String value) {
 
 		return getAll(new IRowFilter() {
-			public boolean accepts(Row row) throws IOException {
+			public boolean accepts(Row row) {
 				String valueRow = row.getObject(column).toString();
 				return (valueRow.matches(value));
 			}
@@ -48,10 +48,10 @@ public class RowOperations {
 
 	}
 
-	public List<Row> getAll(final IRowFilter filter) throws IOException {
+	public List<Row> getAll(final IRowFilter filter) {
 		final List<Row> results = new Vector<Row>();
 		table.forEachRow(new IRowProcessor() {
-			public void process(Row row) throws IOException {
+			public void process(Row row) {
 				if (filter.accepts(row)) {
 					results.add(row);
 				}
@@ -60,7 +60,7 @@ public class RowOperations {
 		return results;
 	}
 
-	public Row append() throws IOException {
+	public Row append() {
 		for (AbstractColumn column : table.storage) {
 			column.add(null);
 		}
@@ -68,19 +68,19 @@ public class RowOperations {
 		return new Row(table, index);
 	}
 
-	public void sortBy(final String column) throws IOException {
+	public void sortBy(final String column) {
 		sortBy(column, ColumnSorter.SORT_ASCEND);
 	}
 
-	public void sortAscBy(final String column) throws IOException {
+	public void sortAscBy(final String column) {
 		sortBy(column, ColumnSorter.SORT_ASCEND);
 	}
 
-	public void sortDescBy(final String column) throws IOException {
+	public void sortDescBy(final String column) {
 		sortBy(column, ColumnSorter.SORT_DESCEND);
 	}
 
-	public void sortBy(final String column, final int order) throws IOException {
+	public void sortBy(final String column, final int order) {
 		table.assertsColumnExists(column);
 		ColumnSorter processor = new ColumnSorter(table.getColumns().get(column), order);
 
@@ -90,11 +90,11 @@ public class RowOperations {
 
 	}
 
-	public void dropByRegEx(String column, String regExp) throws IOException {
+	public void dropByRegEx(String column, String regExp) throws RuntimeException {
 		drop(new RowValueRegExFilter(column, regExp));
 	}
 
-	public void drop(final IRowFilter filter) throws IOException {
+	public void drop(final IRowFilter filter) throws RuntimeException {
 
 		RowSelectionProcessor processor = new RowSelectionProcessor(filter);
 		table.forEachRow(processor);
@@ -102,7 +102,7 @@ public class RowOperations {
 
 	}
 
-	public void drop(List<Boolean> bitmask) throws IOException {
+	public void drop(List<Boolean> bitmask) throws RuntimeException {
 
 		Table.log(table, "Droping rows...");
 
@@ -120,16 +120,16 @@ public class RowOperations {
 
 	}
 
-	public void dropDuplicates() throws IOException {
+	public void dropDuplicates() {
 		RowDuplicateProcessor processor = new RowDuplicateProcessor();
 		table.forEachRow(processor);
 		drop(processor.getBitmask());
 	}
 
-	public void dropMissings() throws IOException {
+	public void dropMissings() {
 		IRowFilter filter = new IRowFilter() {
 			@Override
-			public boolean accepts(Row row) throws IOException {
+			public boolean accepts(Row row) {
 				return row.hasMissings();
 			}
 		};
@@ -138,10 +138,10 @@ public class RowOperations {
 		drop(processor.getBitmask());
 	}
 
-	public void dropMissings(String column) throws IOException {
+	public void dropMissings(String column) {
 		IRowFilter filter = new IRowFilter() {
 			@Override
-			public boolean accepts(Row row) throws IOException {
+			public boolean accepts(Row row) {
 				return (row.getObject(column) == null);
 			}
 		};
@@ -150,11 +150,11 @@ public class RowOperations {
 		drop(processor.getBitmask());
 	}
 
-	public void selectByRegEx(String column, String regExp) throws IOException {
+	public void selectByRegEx(String column, String regExp) {
 		select(new RowValueRegExFilter(column, regExp));
 	}
 
-	public void select(final IRowFilter filter) throws IOException {
+	public void select(final IRowFilter filter) {
 
 		RowSelectionProcessor processor = new RowSelectionProcessor(filter);
 		table.forEachRow(processor);
@@ -162,7 +162,7 @@ public class RowOperations {
 
 	}
 
-	public void select(List<Boolean> bitmask) throws IOException {
+	public void select(List<Boolean> bitmask) {
 
 		Table.log(table, "Filtering rows...");
 
@@ -180,16 +180,16 @@ public class RowOperations {
 
 	}
 
-	public int getSize() throws IOException {
+	public int getSize() {
 		table.assertsNotEmpty();
 		return table.storage.get(0).getSize();
 	}
 
-	public String[][] data() throws IOException {
+	public String[][] data() {
 		return data(0, getSize() - 1);
 	}
 
-	public String[][] data(int start, int end) throws IOException {
+	public String[][] data(int start, int end) throws RuntimeException {
 
 		int height = (end - start) + 1;
 

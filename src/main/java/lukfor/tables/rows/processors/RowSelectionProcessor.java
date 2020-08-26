@@ -1,6 +1,5 @@
 package lukfor.tables.rows.processors;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
@@ -18,7 +17,7 @@ public class RowSelectionProcessor implements IRowProcessor {
 		this.filter = filter;
 	}
 
-	public void process(Row row) throws IOException {
+	public void process(Row row) {
 		bitmask.add(filter.accepts(row));
 	}
 

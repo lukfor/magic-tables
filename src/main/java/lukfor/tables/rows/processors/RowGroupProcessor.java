@@ -1,6 +1,5 @@
 package lukfor.tables.rows.processors;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class RowGroupProcessor implements IRowProcessor{
 	}
 	
 	@Override
-	public void process(Row row) throws IOException {
+	public void process(Row row) {
 		
 		index++;
 		

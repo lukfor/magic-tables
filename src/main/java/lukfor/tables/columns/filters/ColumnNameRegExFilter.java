@@ -1,7 +1,5 @@
 package lukfor.tables.columns.filters;
 
-import java.io.IOException;
-
 import lukfor.tables.columns.AbstractColumn;
 
 public class ColumnNameRegExFilter implements IColumnFilter {
@@ -12,7 +10,7 @@ public class ColumnNameRegExFilter implements IColumnFilter {
 		this.regex = regex;
 	}
 
-	public boolean accepts(AbstractColumn column) throws IOException {
+	public boolean accepts(AbstractColumn column) {
 		return column.getName().matches(regex);
 	}
 

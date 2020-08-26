@@ -1,7 +1,6 @@
 package lukfor.tables.columns;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+
+import lukfor.tables.exceptions.TableException;
 
 public abstract class AbstractColumn {
 
@@ -157,7 +158,7 @@ public abstract class AbstractColumn {
 		}
 	}
 
-	public void apply(IApplyFunction function) throws IOException {
+	public void apply(IApplyFunction function) {
 		for (int i = 0; i < storage.size(); i++) {
 			Object value = storage.get(i);
 			Object newValue = function.apply(value);
@@ -165,14 +166,14 @@ public abstract class AbstractColumn {
 		}
 	}
 
-	public void replaceValue(Object oldValue, Object newValue) throws IOException {
+	public void replaceValue(Object oldValue, Object newValue) {
 		replaceValue(new Object[] { oldValue }, new Object[] { newValue });
 	}
 
-	public void replaceValue(Object[] oldValues, Object[] newValues) throws IOException {
+	public void replaceValue(Object[] oldValues, Object[] newValues) {
 
 		if (oldValues.length != newValues.length) {
-			throw new IOException("Arrays 'oldValues' and 'newValues' have different length.");
+			throw new TableException("Arrays 'oldValues' and 'newValues' have different length.");
 		}
 
 		for (int i = 0; i < storage.size(); i++) {

@@ -1,6 +1,5 @@
 package lukfor.tables;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -60,7 +59,7 @@ public class Table {
 		return rows.get(index);
 	}
 
-	public void forEachRow(final IRowProcessor processor) throws IOException {
+	public void forEachRow(final IRowProcessor processor) {
 		assertsNotEmpty();
 		for (int i = 0; i < getRows().getSize(); i++) {
 			Row row = rows.get(i);
@@ -76,11 +75,11 @@ public class Table {
 		return rows;
 	}
 
-	public GroupByBuilder groupBy(final String column) throws IOException {
+	public GroupByBuilder groupBy(final String column) {
 
 		IRowMapper mapper = new IRowMapper() {
 			@Override
-			public Object getKey(Row row) throws IOException {
+			public Object getKey(Row row) {
 				return row.getObject(column);
 			}
 		};
@@ -88,26 +87,28 @@ public class Table {
 		return new GroupByBuilder(this, mapper, column);
 	}
 
-	public Table groupBy(final String column, IRowAggregator aggregator) throws IOException {
+	public Table groupBy(final String column, IRowAggregator aggregator) {
 
 		return groupBy(new IRowMapper() {
 			@Override
-			public Object getKey(Row row) throws IOException {
+			public Object getKey(Row row) {
 				return row.getObject(column);
 			}
 		}, aggregator);
 
 	}
 
-	public Table binBy(final String column, double binSize, IRowAggregator aggregator) throws IOException {
+	public Table binBy(final String column, double binSize, IRowAggregator aggregator) {
 		return groupBy(new BinRowMapper(column, binSize), aggregator);
 	}
 
-	public Table hist(final String column, double binSize) throws IOException {
-		return groupBy(new BinRowMapper(column, binSize), new CountRowAggregator(column));
+	public Table hist(final String column, double binSize) {
+		Table hist = groupBy(new BinRowMapper(column, binSize), new CountRowAggregator(column));
+		hist.getRows().sortBy(column);
+		return hist;
 	}
 
-	public Table groupBy(IRowMapper mapper, IRowAggregator aggregator) throws IOException {
+	public Table groupBy(IRowMapper mapper, IRowAggregator aggregator) {
 		RowGroupProcessor processor = new RowGroupProcessor(mapper);
 		forEachRow(processor);
 		Table result = null;
@@ -130,7 +131,7 @@ public class Table {
 		return result;
 	}
 
-	public List<Table> splitBy(IRowMapper mapper) throws IOException {
+	public List<Table> splitBy(IRowMapper mapper) {
 		RowGroupProcessor processor = new RowGroupProcessor(mapper);
 		forEachRow(processor);
 		List<Table> result = new Vector<>();
@@ -148,7 +149,7 @@ public class Table {
 		return result;
 	}
 
-	public void append(Table table) throws IOException {
+	public void append(Table table) {
 		table.forEachRow(new RowCopyProcessor(this));
 	}
 
@@ -174,21 +175,21 @@ public class Table {
 		return uniques;
 	}
 
-	public void replaceValue(Object oldValue, Object newValue) throws IOException {
+	public void replaceValue(Object oldValue, Object newValue) {
 		replaceValue(new Object[] { oldValue }, new Object[] { newValue });
 	}
 
-	public void replaceValue(Object[] oldValues, Object[] newValues) throws IOException {
+	public void replaceValue(Object[] oldValues, Object[] newValues) {
 		for (AbstractColumn column : storage) {
 			column.replaceValue(oldValues, newValues);
 		}
 	}
 
-	public void merge(final Table table2, final String column) throws IOException {
+	public void merge(final Table table2, final String column) {
 		merge(table2, column, column);
 	}
 
-	public void merge(final Table table2, final String columnTable1, final String columnTable2) throws IOException {
+	public void merge(final Table table2, final String columnTable1, final String columnTable2) {
 
 		Table.log(this, "Merging with table " + table2.getName() + " on " + columnTable1 + "=" + columnTable2 + "...");
 
@@ -209,7 +210,7 @@ public class Table {
 		// use index to find for each row in table1 the row in table 2
 		forEachRow(new IRowProcessor() {
 
-			public void process(Row row) throws IOException {
+			public void process(Row row) {
 				Object value = row.getObject(columnTable1);
 				Row rowTable2 = index.getRow(value);
 				if (rowTable2 != null) {
@@ -226,7 +227,7 @@ public class Table {
 
 	}
 
-	public Table cloneStructure(String name) throws IOException {
+	public Table cloneStructure(String name) {
 		Table table = new Table(getName() + ":" + name);
 		for (AbstractColumn column : storage) {
 			table.getColumns().append(column.cloneStructure());
@@ -236,14 +237,9 @@ public class Table {
 
 	public Table clone() {
 		Table.log(this, "Cloing table...");
-		Table table = null;
-		try {
-			table = cloneStructure("cloned");
-			for (AbstractColumn column : storage) {
-				table.getColumn(column.getName()).copyDataFrom(column);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		Table table = cloneStructure("cloned");
+		for (AbstractColumn column : storage) {
+			table.getColumn(column.getName()).copyDataFrom(column);
 		}
 		Table.log(this, "Table cloned.");
 		return table;
@@ -257,7 +253,7 @@ public class Table {
 		return name;
 	}
 
-	public TableIndex createIndex(String column) throws IOException {
+	public TableIndex createIndex(String column) {
 		Table.log(this, "Creating index on column " + column + "...");
 
 		long start = System.currentTimeMillis();
@@ -281,40 +277,40 @@ public class Table {
 		}
 	}
 
-	protected void assertsColumnExists(String column) throws IOException {
+	protected void assertsColumnExists(String column) {
 		if (columns.get(column) == null) {
-			throw new IOException("Column '" + column + "' not found.");
+			throw new RuntimeException("Column '" + column + "' not found.");
 		}
 	}
 
-	protected void assertsColumnExists(int column) throws IOException {
+	protected void assertsColumnExists(int column) {
 		if (column >= getColumns().getSize()) {
-			throw new IOException("Column '" + column + "' not found.");
+			throw new RuntimeException("Column '" + column + "' not found.");
 		}
 	}
 
-	protected void assertsNotEmpty() throws IOException {
+	protected void assertsNotEmpty() {
 		if (storage.size() == 0) {
-			throw new IOException("Table is empty.");
+			throw new RuntimeException("Table is empty.");
 		}
 	}
 
-	public void printFirst(int n) throws IOException {
+	public void printFirst(int n) {
 		n = Math.min(n, getRows().getSize());
 		printBetween(0, n - 1);
 	}
 
-	public void printLast(int n) throws IOException {
+	public void printLast(int n) {
 		int height = getRows().getSize() - 1;
 		int start = Math.max(height - n, 0);
 		printBetween(start, height);
 	}
 
-	public void printBetween(int start, int end) throws IOException {
+	public void printBetween(int start, int end) {
 		System.out.println(getAsString(start, end));
 	}
 
-	public String getAsString(int start, int end) throws IOException {
+	public String getAsString(int start, int end) {
 
 		int height = getRows().getSize() - 1;
 		start = Math.max(start, 0);
@@ -336,15 +332,15 @@ public class Table {
 		return result;
 	}
 
-	public void print() throws IOException {
+	public void print() {
 		printFirst(25);
 	}
 
-	public void printAll() throws IOException {
+	public void printAll() {
 		printFirst(getRows().getSize());
 	}
 
-	public Table getSummary() throws IOException {
+	public Table getSummary() {
 		Table table = new Table(name + ":summary");
 		table.getColumns().append(new StringColumn("column"));
 		table.getColumns().append(new StringColumn("type"));
@@ -366,7 +362,7 @@ public class Table {
 		return table;
 	}
 
-	public void printSummary() throws IOException {
+	public void printSummary() {
 
 		System.out.println(name + " [" + getRows().getSize() + " x " + getColumns().getSize() + "]");
 
@@ -374,7 +370,7 @@ public class Table {
 		table.printAll();
 	}
 
-	public void detectTypes() throws IOException {
+	public void detectTypes() {
 
 		Table.log(this, "Detecting table types...");
 

@@ -1,7 +1,5 @@
 package lukfor.tables.utils;
 
-import java.io.IOException;
-
 import lukfor.tables.Table;
 import lukfor.tables.rows.IRowAggregator;
 import lukfor.tables.rows.IRowMapper;
@@ -25,27 +23,27 @@ public class GroupByBuilder {
 		this.keyColumn = keyColumn;
 	}
 
-	public Table count() throws IOException {
+	public Table count() {
 		return table.groupBy(mapper, new CountRowAggregator(keyColumn));
 	}
 
-	public Table sum(String column) throws IOException {
+	public Table sum(String column) {
 		return table.groupBy(mapper, new SumRowAggregator(keyColumn, column));
 	}
 
-	public Table mean(String column) throws IOException {
+	public Table mean(String column) {
 		return table.groupBy(mapper, new MeanRowAggregator(keyColumn, column));
 	}
 
-	public Table min(String column) throws IOException {
+	public Table min(String column) {
 		return table.groupBy(mapper, new MinRowAggregator(keyColumn, column));
 	}
 
-	public Table max(String column) throws IOException {
+	public Table max(String column) {
 		return table.groupBy(mapper, new MaxRowAggregator(keyColumn, column));
 	}
 
-	public Table aggregate(IRowAggregator aggregator) throws IOException {
+	public Table aggregate(IRowAggregator aggregator) {
 		return table.groupBy(mapper, aggregator);
 	}
 

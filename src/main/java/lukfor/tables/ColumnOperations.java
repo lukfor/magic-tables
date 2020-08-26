@@ -1,6 +1,5 @@
 package lukfor.tables;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import lukfor.tables.columns.IBuildValueFunction;
 import lukfor.tables.columns.filters.ColumnNameFilter;
 import lukfor.tables.columns.filters.ColumnNameRegExFilter;
 import lukfor.tables.columns.filters.IColumnFilter;
+import lukfor.tables.exceptions.TableException;
 import lukfor.tables.rows.IRowProcessor;
 import lukfor.tables.rows.Row;
 
@@ -37,7 +37,7 @@ public class ColumnOperations {
 		if (column != null) {
 			return column;
 		} else {
-			throw new RuntimeException("Column '" + name + "' not found.");
+			throw new TableException("Column '" + name + "' not found.");
 		}
 	}
 
@@ -45,15 +45,15 @@ public class ColumnOperations {
 		if (index >= 0 && index < columns.size()) {
 			return columns.get(index);
 		} else {
-			throw new RuntimeException("Column index " + index + " is out of bounds.");
+			throw new TableException("Column index " + index + " is out of bounds.");
 		}
 
 	}
 
-	public void rename(String oldName, String newName) throws IOException {
+	public void rename(String oldName, String newName) {
 		table.assertsColumnExists(oldName);
 		if (columnsIndex.get(newName) != null) {
-			throw new IOException("Duplicate column '" + newName + ".");
+			throw new TableException("Duplicate column '" + newName + ".");
 		}
 		AbstractColumn column = get(oldName);
 		column.setName(newName);
@@ -61,12 +61,12 @@ public class ColumnOperations {
 		columnsIndex.put(newName, column);
 	}
 
-	public AbstractColumn append(AbstractColumn column) throws IOException {
+	public AbstractColumn append(AbstractColumn column) {
 
 		append(column, new IBuildValueFunction() {
 
 			@Override
-			public Object buildValue(Row row) throws IOException {
+			public Object buildValue(Row row) {
 				return null;
 			}
 		});
@@ -75,10 +75,10 @@ public class ColumnOperations {
 
 	}
 
-	public AbstractColumn append(final AbstractColumn column, final IBuildValueFunction builder) throws IOException {
+	public AbstractColumn append(final AbstractColumn column, final IBuildValueFunction builder) {
 
 		if (columnsIndex.get(column.getName()) != null) {
-			throw new IOException("Duplicate column '" + column + ".");
+			throw new TableException("Duplicate column '" + column + ".");
 		}
 
 		columns.add(column);
@@ -88,12 +88,12 @@ public class ColumnOperations {
 
 			table.forEachRow(new IRowProcessor() {
 
-				public void process(Row row) throws IOException {
+				public void process(Row row) {
 					Object value = builder.buildValue(row);
 					if (value == null || column.accepts(value)) {
 						column.add(value);
 					} else {
-						throw new IOException("Wrong class: " + value.getClass());
+						throw new TableException("Wrong class: " + value.getClass());
 					}
 				}
 
@@ -105,14 +105,14 @@ public class ColumnOperations {
 
 	}
 
-	public void setType(String column, ColumnType type) throws IOException {
+	public void setType(String column, ColumnType type) {
 
 		table.assertsColumnExists(column);
 		AbstractColumn oldColumn = get(column);
 		setType(oldColumn, type);
 	}
 
-	public void setType(AbstractColumn column, ColumnType type) throws IOException {
+	public void setType(AbstractColumn column, ColumnType type) {
 
 		AbstractColumn newColumn = ColumnFactory.createColumn(column.getName(), type);
 		newColumn.copyDataFrom(column);
@@ -138,18 +138,18 @@ public class ColumnOperations {
 		return types;
 	}
 
-	public void drop(String... names) throws IOException {
+	public void drop(String... names) {
 		drop(new ColumnNameFilter(names));
 	}
 
-	public void dropByRegEx(String regex) throws IOException {
+	public void dropByRegEx(String regex) {
 
 		ColumnNameRegExFilter filter = new ColumnNameRegExFilter(regex);
 		drop(filter);
 
 	}
 
-	public void drop(IColumnFilter filter) throws IOException {
+	public void drop(IColumnFilter filter) {
 		List<AbstractColumn> removedColumns = new Vector<AbstractColumn>();
 		for (AbstractColumn column : columns) {
 			if (filter.accepts(column)) {
@@ -162,15 +162,15 @@ public class ColumnOperations {
 		}
 	}
 
-	public void select(String... names) throws IOException {
+	public void select(String... names) {
 		select(new ColumnNameFilter(names));
 	}
 
-	public void selectByRegEx(String regex) throws IOException {
+	public void selectByRegEx(String regex) {
 		select(new ColumnNameRegExFilter(regex));
 	}
 
-	public void select(IColumnFilter filter) throws IOException {
+	public void select(IColumnFilter filter) {
 		List<AbstractColumn> removedColumns = new Vector<AbstractColumn>();
 		for (AbstractColumn column : columns) {
 			if (!filter.accepts(column)) {
