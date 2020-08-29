@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-<title>${title}</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css">
+<title>{{title}}</title>
+{{import_style("css/github-markdown.min.css")}}
+{{import_style("css/index.css")}}
+
 <style>
 			body {
 				box-sizing: border-box;
@@ -14,12 +16,14 @@
 				padding: 45px;
 			}
 		</style>
+{{head}}
 </head>
 <body>
 <article class="markdown-body">
-      ${content}<br>
-	    <hr>
-	    <small>Created by <b>${username}</b> on <b>${date}</b></small><br><br>
+      
+      {{content}}
 </article>
+
+{{activate_widgets("")}}
 </body>
 </html>
