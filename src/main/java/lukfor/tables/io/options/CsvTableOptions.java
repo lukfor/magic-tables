@@ -23,6 +23,8 @@ public class CsvTableOptions {
 
 	private String[] columns = null;
 
+	private boolean ignoreComments = false;
+
 	public CsvTableOptions(String filename) {
 		this.filename = filename;
 	}
@@ -91,6 +93,15 @@ public class CsvTableOptions {
 
 	public CsvTableOptions withColumnTypeDetection(boolean columnTypeDetection) {
 		this.columnTypeDetection = columnTypeDetection;
+		return this;
+	}
+
+	public boolean isIgnoreComments() {
+		return ignoreComments;
+	}
+
+	public CsvTableOptions withIgnoreComments(boolean ignoreComments) {
+		this.ignoreComments = ignoreComments;
 		return this;
 	}
 

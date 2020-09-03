@@ -29,10 +29,7 @@ public class TableBuilder {
 	public static Table fromCsvFile(CsvTableOptions options) throws IOException {
 		Table.log("Reading Csv file " + options.getFilename() + "...");
 
-		FileInputStream inputStream = new FileInputStream(options.getFilename());
-		InputStream in2 = FileUtil.decompressStream(inputStream);
-
-		ITableReader reader = new CsvTableReader(new DataInputStream(in2), options.getSeparator());
+		ITableReader reader = new CsvTableReader(options.getFilename(), options.getSeparator(), options.isIgnoreComments());
 
 		String name = FileUtil.getFilename(options.getFilename());
 		return fromTableReader(name, reader, options.isColumnTypeDetection(), options.getColumns());
