@@ -18,7 +18,8 @@ public class DoubleColumn extends AbstractColumn {
 	}
 
 	public DoubleColumn(String name) {
-		this(name, 100);;
+		this(name, 100);
+		;
 	}
 
 	public DoubleColumn(String name, int capacity) {
@@ -33,13 +34,15 @@ public class DoubleColumn extends AbstractColumn {
 
 	@Override
 	public Object valueToObject(String data) {
-		if (data.equals(".") || data.equals("") || data.equalsIgnoreCase("NA") || data.equalsIgnoreCase("NaN") || data.equals("*")) {
+		if (data.equals(".") || data.equals("") || data.equalsIgnoreCase("NA") || data.equalsIgnoreCase("NaN")
+				|| data.equals("*")) {
 			return null;
 		} else {
 			try {
 				return Double.parseDouble(data);
 			} catch (Exception e) {
-				//System.out.println("Column " + getName() + ": Error parsing '" + data + "' to double.");
+				// System.out.println("Column " + getName() + ": Error parsing '" + data + "' to
+				// double.");
 				throw e;
 			}
 		}
@@ -96,6 +99,7 @@ public class DoubleColumn extends AbstractColumn {
 		return sum / (double) count;
 	}
 
+	@Override
 	public Object getMin() {
 		double min = Double.MAX_VALUE;
 		for (Object o : storage) {
@@ -109,6 +113,7 @@ public class DoubleColumn extends AbstractColumn {
 		return min;
 	}
 
+	@Override
 	public Object getMax() {
 		double max = Double.MIN_VALUE;
 		for (Object o : storage) {
@@ -120,6 +125,22 @@ public class DoubleColumn extends AbstractColumn {
 			}
 		}
 		return max;
+	}
+
+	@Override
+	public Object getSd() {
+		double mean = (double) getMean();
+
+		int count = 0;
+		double sum = 0;
+		for (Object o : storage) {
+			if (o != null) {
+				Double d = (Double) o;
+				count++;
+				sum += Math.pow(d - mean, 2);
+			}
+		}
+		return Math.sqrt(sum / (double) count);
 	}
 
 	@Override

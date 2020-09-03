@@ -229,6 +229,10 @@ public abstract class AbstractColumn {
 		return null;
 	}
 
+	public Object getSd() {
+		return null;
+	}
+	
 	public String getSummary() {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps;
