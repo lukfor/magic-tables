@@ -219,7 +219,11 @@ public class Table {
 				Object value = row.getObject(columnTable1);
 				Row rowTable2 = index.getRow(value);
 				if (rowTable2 != null) {
-					row.fill(rowTable2);
+					for (String column : table2.getColumns().getNames()) {
+						if (!column.equals(columnTable2)) {
+							row.set(column, row.getObject(column));
+						}
+					}
 				}
 			}
 
