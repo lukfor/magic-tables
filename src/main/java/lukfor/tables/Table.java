@@ -221,7 +221,7 @@ public class Table {
 				if (rowTable2 != null) {
 					for (String column : table2.getColumns().getNames()) {
 						if (!column.equals(columnTable2)) {
-							row.set(column, row.getObject(column));
+							row.set(column, rowTable2.getObject(column));
 						}
 					}
 				}
