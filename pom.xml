@@ -5,7 +5,7 @@
 
 	<groupId>com.github.lukfor</groupId>
 	<artifactId>magic-tables</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1</version>
 	<packaging>jar</packaging>
 
 	<name>magic tables</name>
